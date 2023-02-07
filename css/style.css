@@ -1,0 +1,12 @@
+h1 {
+    color:red;
+}
+
+#myCanvas {
+    border: 1px solid black;
+    background-color: lightgray;
+}
+
+video {
+    display:none;
+}
