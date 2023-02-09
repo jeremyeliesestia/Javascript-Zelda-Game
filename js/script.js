@@ -7,6 +7,7 @@ import { ajouteEcouteurSouris, ajouteEcouteursClavier, inputState, mousePos } fr
 import { circRectsOverlap, rectsOverlap } from './collisions.js';
 import { loadAssets } from './assets.js';
 import Sortie from './Sortie.js';
+import ObstacleRounded from './ObstacleRounded.js';
 
 
 let canvas, ctx;
@@ -15,10 +16,11 @@ let joueur, sortie;
 let niveau = 1;
 let tableauDesObjetsGraphiques = [];
 let assets;
+var timeSprite = 0;
 
 var assetsToLoadURLs = {
     joueur: { url: '../assets/images/mario.png' }, // http://www.clipartlord.com/category/weather-clip-art/winter-clip-art/
-    backgroundImage: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/images/background.png' }, // http://www.clipartlord.com/category/weather-clip-art/winter-clip-art/
+    backgroundImage: { url: '../assets/images/haunted_grove.png' }, // http://www.clipartlord.com/category/weather-clip-art/winter-clip-art/
     logo1: { url: "https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/images/SkywardWithoutBalls.png" },
     logo2: { url: "https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/images/BoundsWithoutBalls.png" },
     bell: { url: "https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/images/bells.png" },
@@ -28,7 +30,8 @@ var assetsToLoadURLs = {
     humbug: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/sounds/humbug.mp3', buffer: true, loop: true, volume: 0.5 },
     concertino: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/sounds/christmas_concertino.mp3', buffer: true, loop: true, volume: 1.0 },
     xmas: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/sounds/xmas.mp3', buffer: true, loop: true, volume: 0.6 },
-    backinblack: { url: '../assets/audio/backinblack.m4a', buffer: true, loop: true, volume: 0.5 }
+    linkForestMusic: { url: '../assets/audio/overworld_theme.mp3', buffer: true, loop: true, volume: 0.5 },
+    backinblack: { url: '../assets/audio/backinblack.m4a', buffer: true, loop: true, volume: 0.1  }
 
 };
 
@@ -56,47 +59,45 @@ function startGame(assetsLoaded) {
     console.log("StartGame : tous les assets sont chargés");
     //assets.backinblack.play();
 
+    assets.linkForestMusic.play()
+
    // On va prendre en compte le clavier
-   ajouteEcouteursClavier();
-   ajouteEcouteurSouris();
+    ajouteEcouteursClavier();
+    ajouteEcouteurSouris();
 
     // On va créer un joueur
-    joueur = new Joueur(100, 0, 50, 50, assets.joueur, 3);
+    
+    //joueur = new Joueur(100, 0, 50, 50, assets.joueur, 3);
+    joueur = new Joueur(50, 240, 50, 50, 3);
+
     tableauDesObjetsGraphiques.push(joueur);
+
     // On crée la sortie
-    sortie = new Sortie(700, 400, 30, 'yellow');
+    sortie = new Sortie(700, 250, 30, 'yellow');
     tableauDesObjetsGraphiques.push(sortie);
+
     // et des obstacles
     creerDesObstaclesLevel1();
-
     requestAnimationFrame(animationLoop);
 }
 
 function creerDesObstaclesLevel1() {
-    tableauDesObjetsGraphiques.push(new Obstacle(250, 0, 30, 300, 'green'));
-    tableauDesObjetsGraphiques.push(new ObstacleAnime(450, 0, 30, 300, 'green', 1));
-    tableauDesObjetsGraphiques.push(new ObstacleAnimeClignotant(350, 0, 30, 300, 'red', 1));
-    let url ='https://img.freepik.com/free-vector/seamless-japanese-inspired-geometric-pattern_53876-80353.jpg';
-    tableauDesObjetsGraphiques.push(new ObstacleTexture(550, 0, 30, 300, url));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(195, 155, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(578, 155, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(195, 378, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(610, 378, 70));
 }
-
-function dessinerLesObjetsGraphiques(ctx) {
-    tableauDesObjetsGraphiques.forEach(o => {
-        o.draw(ctx);
-    });
-    /*
-    for(let i = 0; i < tableauDesObstacles.length; i++) {
-        tableauDesObstacles[i].draw(ctx);
-    }
-    */
-}
-
 var y = 0;
 function animationLoop() {
     // On va exécuter cette fonction 60 fois par seconde
     // pour créer l'illusion d'un mouvement fluide
     // 1 - On efface le contenu du canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 2 - On dessine le nouveau contenu
+    // On met le fond d'écran du canva
+    ctx.drawImage(assets.backgroundImage, 0, 0, canvas.width, canvas.height);
+
     switch (gameState) {
         case 'menuStart':
             afficheMenuStart(ctx);
@@ -115,8 +116,40 @@ function animationLoop() {
 
             // 3 - on déplace les objets
             testeEtatClavierPourJoueur();
+            
+            timeSprite += 1;
+            if (timeSprite == 60) {
+                timeSprite = 0;
+            }
+
+
+
+
+            if(inputState.left){
+                joueur.spriteMvt('left', timeSprite);
+            }
+
+            else if(inputState.right){   
+                joueur.spriteMvt('right', timeSprite);
+            }
+
+            else if(inputState.up){  
+                joueur.spriteMvt('up', timeSprite);
+            }
+
+            else if(inputState.down){
+                joueur.spriteMvt('down', timeSprite);
+            }
+
+            else if(!inputState.left && !inputState.right && !inputState.up && !inputState.down){
+                joueur.spriteMvt('any', timeSprite);
+            }
 
             joueur.move();
+
+
+
+
             //joueur.followMouse()
             joueur.testeCollisionAvecBordsDuCanvas(canvas.width, canvas.height);
             detecteCollisionJoueurAvecObstacles();
@@ -127,7 +160,6 @@ function animationLoop() {
     // 4 - On rappelle la fonction d'animation
     requestAnimationFrame(animationLoop);
 }
-
 function afficheEcranDebutNiveau(ctx) {
     ctx.save();
     ctx.fillStyle = 'black';
@@ -137,7 +169,6 @@ function afficheEcranDebutNiveau(ctx) {
     ctx.fillText("Bienvenue au niveau "+niveau, 190, 100);
     ctx.restore();
 }
-
 function afficheMenuStart(ctx) {
     ctx.save()
     ctx.fillStyle = 'black';
@@ -166,77 +197,115 @@ function afficheGameOver(ctx) {
     ctx.restore();
 }
 function testeEtatClavierPourJoueur() {
+
     joueur.vx = 0;
     if (inputState.left) {
-        joueur.vx = -5;
+        joueur.vx = -joueur.v;
     } else {
-        if (inputState.right) joueur.vx = 5;
+        if (inputState.right) joueur.vx = joueur.v;
     }
     joueur.vy = 0;
     if (inputState.up) {
-        joueur.vy = -5;
+        joueur.vy = -joueur.v;
     } else {
-        if (inputState.down) joueur.vy = 5;
+        if (inputState.down) joueur.vy = joueur.v;
+
     }
 }
-
-
-function exempleDessin() {
-    ctx.lineWidth = 20
-    ctx.strokeStyle = 'green';
-    ctx.strokeRect(10, y, 100, 150);
-
-    ctx.fillStyle = 'rgba(200, 0, 0, 0.5)';
-    ctx.fillRect(0, 10, 50, 70);
-
-    ctx.lineWidth = 2
-    ctx.font = "130px Arial";
-    ctx.fillText("Hello", 190, 100);
-    ctx.strokeText("Hello", 190, 100);
-
-    // Les rectangles avec strokeRect et fillRect sont en mode "immédiat"
-    // les cercles, lignes, courbes, sont en mode "bufférisé" ou "chemin" (path)
-    // On commence par définir le chemin et à la fin tout le chemin est dessiné
-    // d'un coup dans le GPU
-    ctx.beginPath();
-    ctx.arc(200, 200, 50, 0, Math.PI * 2);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(400, 200, 50, 0, Math.PI * 2);
-    ctx.stroke();
-
-    // 3 - On déplace les objets, on regarde ce que fait le joueur avec la souris, etc.
-    // On teste les collisions etc... bref, on change l'état des objets graphiques à dessiner
-    y += 0.1;
-}
-
-
-
 function detecteCollisionJoueurAvecObstacles() {
     let collisionExist = false;
+    let currentObstacle = null;
+    let typeObstacle = null;
     // On va tester si le joueur est en collision avec un des obstacles
     tableauDesObjetsGraphiques.forEach(o => {
+        
         if (o instanceof Obstacle) {
             if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
                 collisionExist = true;
-                assets.plop.play();
+                currentObstacle = o;
+                typeObstacle = 'rect';
+                //assets.plop.play();
             }
         }
-    });
+        if (o instanceof ObstacleRounded) {
+            if (circRectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.r)) {
+                collisionExist = true;
+                currentObstacle = o;
+                typeObstacle = 'rounded';
+                //assets.plop.play();
+            }
+        }
+    }
+    );
 
     if (collisionExist) {
         joueur.couleur = 'red';
-        //gameState = 'gameOver';
-        joueur.x -= 10;
+        joueur.v = 0;
+
+        if (typeObstacle == 'rect') {
+            if ((inputState.left || inputState.right) && (!inputState.up && !inputState.down)) {
+            //collision par la gauche
+                if(joueur.x < currentObstacle.x){
+                    joueur.x = currentObstacle.x - joueur.l - 5;
+                }
+                //collision par la droite
+                if(joueur.x > currentObstacle.x){
+                    joueur.x = currentObstacle.x + currentObstacle.l + 5;
+                }
+            }
+
+            if ((inputState.up || inputState.down) && (!inputState.left && !inputState.right)) {
+                //collision par le haut
+                if(joueur.y < currentObstacle.y){
+                    joueur.y = currentObstacle.y - joueur.h - 5;
+                }
+                //collision par le bas
+                if(joueur.y > currentObstacle.y){
+                    joueur.y = currentObstacle.y + currentObstacle.h + 5;
+                }
+            }
+        }
+
+        if (typeObstacle == 'rounded') {
+
+            if ((inputState.left || inputState.right) && (!inputState.up && !inputState.down)) {
+                //collision par la gauche
+                if(joueur.x < currentObstacle.x){
+                    joueur.x = currentObstacle.x - (currentObstacle.x - joueur.x) - 5;
+                }
+                //collision par la droite
+                if(joueur.x > currentObstacle.x){
+                    joueur.x = currentObstacle.x + (joueur.x - currentObstacle.x) + 5;
+                }
+            }
+
+            if ((inputState.up || inputState.down) && (!inputState.left && !inputState.right)) {
+                //collision par le haut
+                if(joueur.y < currentObstacle.y){
+                    joueur.y = currentObstacle.y - (currentObstacle.y - joueur.y) - 5;
+                }
+                //collision par le bas
+                if(joueur.y > currentObstacle.y){
+                    joueur.y = currentObstacle.y + (joueur.y - currentObstacle.y) + 5;
+                }
+            }
+
+
+
+        }
+
+
+
+
+
     } else {
+        joueur.v = 5;
         joueur.couleur = 'green';
     }
 }
-
 function detecteCollisionJoueurAvecSortie() {
-    joueur.drawBoundingBox(ctx);
-    sortie.drawBoundingBox(ctx);
+    //joueur.drawBoundingBox(ctx);
+    //sortie.drawBoundingBox(ctx);
     if (circRectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, sortie.x, sortie.y, sortie.r)) {
         joueur.x = 10;
         joueur.y = 10;
@@ -247,7 +316,6 @@ function detecteCollisionJoueurAvecSortie() {
         assets.victory.play();
     }
 }
-
 function niveauSuivant(niveau) {
     // Passe au niveau suivant....
     // todo.....
