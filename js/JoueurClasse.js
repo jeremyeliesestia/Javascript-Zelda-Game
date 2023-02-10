@@ -2,21 +2,23 @@ import ObjetGraphique from "./ObjetGraphique.js";
 
 export default class Joueur extends ObjetGraphique {
  
-    constructor(x, y, l, h, nbVies) {
+    constructor(x, y, l, h, nbVies, spriteTableau) {
         // on appelle le constructeur de la classe mère
         // pour initialiser les propriétés héritées
         super(x, y, l, h, 'black');
 
         //on recupere l'image du joueur en png que l'on divise en 30*30 et on l'associe à la propriété sprite
-        let url = new Image();
-        url.src = "../assets/images/LinkSprite/LinkSpriteDown/Static/00_link_sprite.png";
-        this.sprite = url;
+        // let url = new Image();
+        // url.src = "../assets/images/LinkSprite/LinkSpriteDown/Static/1_link_sprite.png";
+        // this.sprite = url;
 
         // on initialise les propriétés propres à la classe Joueur
         this.nbVies = nbVies;
         this.vx = 0;
         this.vy = 0;
         this.v = 5;
+        this.spriteTableau = spriteTableau;
+        this.numeroSprite = 0;
         
         //this.video = document.querySelector('#sourcevid');
         
@@ -31,7 +33,7 @@ export default class Joueur extends ObjetGraphique {
         ctx.save();
         this.drawBoundingBox(ctx);
         ctx.translate(this.x, this.y);
-        ctx.drawImage(this.sprite, 0, 0);
+        ctx.drawImage(this.spriteTableau[this.numeroSprite], 0, 0);
     
         //ctx.drawImage(this.video, 0, 0, this.l, this.h);
         /*
@@ -73,302 +75,205 @@ export default class Joueur extends ObjetGraphique {
         if (direction === 'any') {
         
             if(timeSpriteAny === 0){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Static/00_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 10;
             }
             if(timeSpriteAny === 1){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Static/01_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 11;
             }
             if(timeSpriteAny === 2){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Static/02_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 12;
             }
             if(timeSpriteAny === 3){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Static/00_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 10;
             }
     
         }
 
-        if (direction === 'right') {
+        if (direction === 'down') {
             if (timeSpriteSec === 0){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteRight/Dynamic/70_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 0;
             }
 
             if (timeSpriteSec === 1){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteRight/Dynamic/71_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 1;
             }
 
             if (timeSpriteSec === 2){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteRight/Dynamic/72_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 2;
             }
 
             if (timeSpriteSec === 3){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteRight/Dynamic/73_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 3;
             }
 
             if (timeSpriteSec === 4){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteRight/Dynamic/74_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 4;
             }
 
             if (timeSpriteSec === 5){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteRight/Dynamic/75_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 5;
             }
 
             if (timeSpriteSec === 6){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteRight/Dynamic/76_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 6;
             }
 
             if (timeSpriteSec === 7){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteRight/Dynamic/77_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 7;
             }
 
             if (timeSpriteSec === 8){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteRight/Dynamic/78_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 8;
             }
 
             if (timeSpriteSec === 9){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteRight/Dynamic/79_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 9;
             }
 
             if (timeSpriteSec === 10){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteRight/Dynamic/70_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 0;
             }
 
         }
 
         if (direction === 'left') {
             if (timeSpriteSec === 0){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteLeft/Dynamic/50_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 13;
             }
 
             if (timeSpriteSec === 1){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteLeft/Dynamic/51_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 14;
             }
 
             if (timeSpriteSec === 2){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteLeft/Dynamic/52_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 15;
             }
 
             if (timeSpriteSec === 3){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteLeft/Dynamic/53_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 16;
             }
 
             if (timeSpriteSec === 4){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteLeft/Dynamic/54_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 17;
             }
 
             if (timeSpriteSec === 5){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteLeft/Dynamic/55_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 18;
             }
 
             if (timeSpriteSec === 6){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteLeft/Dynamic/56_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 19;
             }
 
             if (timeSpriteSec === 7){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteLeft/Dynamic/57_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 20;
             }
 
             if (timeSpriteSec === 8){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteLeft/Dynamic/58_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 21;
             }
 
             if (timeSpriteSec === 9){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteLeft/Dynamic/59_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 22;
             }
 
             if (timeSpriteSec === 10){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteLeft/Dynamic/50_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 13;
+            }
+        }
+
+        if (direction === 'right') {
+
+            if (timeSpriteSec === 0){
+                this.numeroSprite = 26;
+            }
+
+            if (timeSpriteSec === 1){
+                this.numeroSprite = 27;
+            }
+
+            if (timeSpriteSec === 2){
+                this.numeroSprite = 28;
+            }
+
+            if (timeSpriteSec === 3){
+                this.numeroSprite = 29;
+            }
+
+            if (timeSpriteSec === 4){
+                this.numeroSprite = 30;
+            }
+
+            if (timeSpriteSec === 5){
+                this.numeroSprite = 31;
+            }
+
+            if (timeSpriteSec === 6){
+                this.numeroSprite = 32;
+            }
+
+            if (timeSpriteSec === 7){
+                this.numeroSprite = 33;
+            }
+
+            if (timeSpriteSec === 8){
+                this.numeroSprite = 34;
+            }
+
+            if (timeSpriteSec === 9){
+                this.numeroSprite = 35;
+            }
+
+            if (timeSpriteSec === 10){
+                this.numeroSprite = 26;
             }
         }
 
         if (direction === 'up') {
-
             if (timeSpriteSec === 0){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteUp/Dynamic/60_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 39;
             }
 
             if (timeSpriteSec === 1){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteUp/Dynamic/61_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 40;
             }
 
             if (timeSpriteSec === 2){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteUp/Dynamic/62_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 41;
             }
 
             if (timeSpriteSec === 3){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteUp/Dynamic/63_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 42;
             }
 
             if (timeSpriteSec === 4){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteUp/Dynamic/64_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 43;
             }
 
             if (timeSpriteSec === 5){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteUp/Dynamic/65_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 44;
             }
 
             if (timeSpriteSec === 6){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteUp/Dynamic/66_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 45;
             }
 
             if (timeSpriteSec === 7){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteUp/Dynamic/67_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 46;
             }
 
             if (timeSpriteSec === 8){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteUp/Dynamic/68_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 47;
             }
 
             if (timeSpriteSec === 9){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteUp/Dynamic/69_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 48;
             }
 
             if (timeSpriteSec === 10){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteUp/Dynamic/60_link_sprite.png";
-                this.sprite = url;
+                this.numeroSprite = 39;
             }
         }
-
-        if (direction === 'down') {
-            if (timeSpriteSec === 0){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Dynamic/40_link_sprite.png";
-                this.sprite = url;
-            }
-
-            if (timeSpriteSec === 1){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Dynamic/41_link_sprite.png";
-                this.sprite = url;
-            }
-
-            if (timeSpriteSec === 2){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Dynamic/42_link_sprite.png";
-                this.sprite = url;
-            }
-
-            if (timeSpriteSec === 3){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Dynamic/43_link_sprite.png";
-                this.sprite = url;
-            }
-
-            if (timeSpriteSec === 4){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Dynamic/44_link_sprite.png";
-                this.sprite = url;
-            }
-
-            if (timeSpriteSec === 5){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Dynamic/45_link_sprite.png";
-                this.sprite = url;
-            }
-
-            if (timeSpriteSec === 6){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Dynamic/46_link_sprite.png";
-                this.sprite = url;
-            }
-
-            if (timeSpriteSec === 7){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Dynamic/47_link_sprite.png";
-                this.sprite = url;
-            }
-
-            if (timeSpriteSec === 8){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Dynamic/48_link_sprite.png";
-                this.sprite = url;
-            }
-
-            if (timeSpriteSec === 9){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Dynamic/49_link_sprite.png";
-                this.sprite = url;
-            }
-
-            if (timeSpriteSec === 10){
-                let url = new Image();
-                url.src = "../assets/images/LinkSprite/LinkSpriteDown/Dynamic/40_link_sprite.png";
-                this.sprite = url;
-            }
-        }
-
 
     }
 

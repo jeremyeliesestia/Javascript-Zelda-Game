@@ -1,5 +1,6 @@
 import Joueur from './JoueurClasse.js';
 import Obstacle from './ObstacleClass.js';
+import Item from './ItemClass.js';
 import ObstacleAnime from './ObstacleAnime.js';
 import ObstacleAnimeClignotant from './ObstacleAnimeClignotant.js';
 import ObstacleTexture from './ObstacleTexture.js';
@@ -16,10 +17,13 @@ let joueur, sortie;
 let niveau = 1;
 let tableauDesObjetsGraphiques = [];
 let assets;
-var timeSprite = 0;
+
+let coeur;
+let timeSprite = 0;
+let timeSpriteHeart = 0;
+let positionTableau = 0;
 
 var assetsToLoadURLs = {
-    joueur: { url: '../assets/images/mario.png' }, // http://www.clipartlord.com/category/weather-clip-art/winter-clip-art/
     backgroundImage: { url: '../assets/images/haunted_grove.png' }, // http://www.clipartlord.com/category/weather-clip-art/winter-clip-art/
     logo1: { url: "https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/images/SkywardWithoutBalls.png" },
     logo2: { url: "https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/images/BoundsWithoutBalls.png" },
@@ -66,9 +70,9 @@ function startGame(assetsLoaded) {
     ajouteEcouteurSouris();
 
     // On va créer un joueur
-    
+    creerTableauSpritePlayer()
     //joueur = new Joueur(100, 0, 50, 50, assets.joueur, 3);
-    joueur = new Joueur(50, 240, 50, 50, 3);
+    joueur = new Joueur(50, 240, 50, 50, 3, tableauSpritePlayer);
 
     tableauDesObjetsGraphiques.push(joueur);
 
@@ -78,6 +82,8 @@ function startGame(assetsLoaded) {
 
     // et des obstacles
     creerDesObstaclesLevel1();
+    creerTableauDesItemsLevel1()
+    creerTableauSpritePlayer()
     requestAnimationFrame(animationLoop);
 }
 
@@ -86,7 +92,122 @@ function creerDesObstaclesLevel1() {
     tableauDesObjetsGraphiques.push(new ObstacleRounded(578, 155, 70));
     tableauDesObjetsGraphiques.push(new ObstacleRounded(195, 378, 70));
     tableauDesObjetsGraphiques.push(new ObstacleRounded(610, 378, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(388, 200, 30));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(388, 0, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(420 , 500, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(90, 0, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(50, 80, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(0, 170, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(-50, 270, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(-5, 360, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(50 , 460, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(780, 0, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(830, 80, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(870 , 170, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(920, 270, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(870, 360, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleRounded(830, 460, 70));
 }
+
+let tableauSpriteItems = [];
+function creerTableauDesItemsLevel1(){
+    
+    //coeur
+    for (let i=16;i<24; i++){
+        let url = new Image();
+        url.src = "../assets/images/Items/" + i + "_Items.png";
+        tableauSpriteItems.push(url)    
+    }
+    coeur = new Item(370, 260, 40, 40, tableauSpriteItems);
+    tableauDesObjetsGraphiques.push(coeur);
+}
+
+
+
+
+let tableauSpritePlayer = [];
+function creerTableauSpritePlayer(){
+    
+    let directionPlayer = null;
+    let typeMvt = null;
+    let i = 1;
+
+    //player down
+    directionPlayer = "LinkSpriteDown";
+        //dynamic
+        typeMvt = "Dynamic";
+        for (i=1;i<11;i++){
+            let url = new Image();
+            url.src = "../assets/images/LinkSprite/" + directionPlayer + "/" + typeMvt + "/" + i + "_link_sprite.png";
+            tableauSpritePlayer.push(url)    
+        }
+
+        //static
+        typeMvt = "Static";
+        for (i=1;i<4;i++){
+            let url = new Image();
+            url.src = "../assets/images/LinkSprite/" + directionPlayer + "/" + typeMvt + "/" + i + "_link_sprite.png";
+            tableauSpritePlayer.push(url)    
+        }
+
+
+    //player left
+    directionPlayer = "LinkSpriteLeft";
+        //dynamic
+        typeMvt = "Dynamic";
+        for (i=1;i<11;i++){
+            let url = new Image();
+            url.src = "../assets/images/LinkSprite/" + directionPlayer + "/" + typeMvt + "/" + i + "_link_sprite.png";
+            tableauSpritePlayer.push(url)    
+        }
+
+        //static
+        typeMvt = "Static";
+        for (i=1;i<4;i++){
+            let url = new Image();
+            url.src = "../assets/images/LinkSprite/" + directionPlayer + "/" + typeMvt + "/" + i + "_link_sprite.png";
+            tableauSpritePlayer.push(url)    
+        }
+
+    //player right
+    directionPlayer = "LinkSpriteRight";
+        //dynamic
+        typeMvt = "Dynamic";
+        for (i=1;i<11;i++){
+            let url = new Image();
+            url.src = "../assets/images/LinkSprite/" + directionPlayer + "/" + typeMvt + "/" + i + "_link_sprite.png";
+            tableauSpritePlayer.push(url)    
+        }
+
+        //static
+        typeMvt = "Static";
+        for (i=1;i<4;i++){
+            let url = new Image();
+            url.src = "../assets/images/LinkSprite/" + directionPlayer + "/" + typeMvt + "/" + i + "_link_sprite.png";
+            tableauSpritePlayer.push(url)    
+        }
+
+    //player up
+    directionPlayer = "LinkSpriteUp";
+        //dynamic
+        typeMvt = "Dynamic";
+        for (i=1;i<11;i++){
+            let url = new Image();
+            url.src = "../assets/images/LinkSprite/" + directionPlayer + "/" + typeMvt + "/" + i + "_link_sprite.png";
+            tableauSpritePlayer.push(url)    
+        }
+
+        //static
+        typeMvt = "Static";
+        for (i=1;i<4;i++){
+            let url = new Image();
+            url.src = "../assets/images/LinkSprite/" + directionPlayer + "/" + typeMvt + "/" + i + "_link_sprite.png";
+            tableauSpritePlayer.push(url)    
+        }
+
+
+}
+
 var y = 0;
 function animationLoop() {
     // On va exécuter cette fonction 60 fois par seconde
@@ -117,10 +238,24 @@ function animationLoop() {
             // 3 - on déplace les objets
             testeEtatClavierPourJoueur();
             
-            timeSprite += 1;
+            timeSprite += 1; 
             if (timeSprite == 60) {
                 timeSprite = 0;
             }
+
+
+            //timer pour le sprite du coeur
+            timeSpriteHeart += 1;
+            if (timeSpriteHeart == 5) {
+                coeur.spriteMvt(positionTableau);
+                positionTableau += 1;
+                if (positionTableau == 8) {
+                    positionTableau = 0;
+                }
+                timeSpriteHeart = 0;
+            }
+
+
 
 
 
@@ -145,7 +280,18 @@ function animationLoop() {
                 joueur.spriteMvt('any', timeSprite);
             }
 
+
+
+
+
+
+
+
             joueur.move();
+
+
+
+
 
 
 
