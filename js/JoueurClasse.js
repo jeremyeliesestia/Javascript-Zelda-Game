@@ -11,6 +11,7 @@ export default class Joueur extends ObjetGraphique {
         let url = new Image();
         url.src = "../assets/images/LinkSprite/LinkSpriteDown/Static/00_link_sprite.png";
         this.sprite = url;
+        
 
         // on initialise les propriétés propres à la classe Joueur
         this.nbVies = nbVies;
@@ -371,6 +372,9 @@ export default class Joueur extends ObjetGraphique {
 
 
     }
+
+    
+    
 
     followMouse(mousePos) {
         this.x = mousePos.x - this.l / 2;
