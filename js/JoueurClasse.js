@@ -31,7 +31,7 @@ export default class Joueur extends ObjetGraphique {
         // on sauvegarde le contexte avant de le modifier et
         // on le restaure à la fin de la fonction
         ctx.save();
-        this.drawBoundingBox(ctx);
+        //this.drawBoundingBox(ctx);
         ctx.translate(this.x, this.y);
         ctx.drawImage(this.spriteTableau[this.numeroSprite], 0, 0);
     

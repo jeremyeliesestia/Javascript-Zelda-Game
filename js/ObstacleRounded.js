@@ -13,20 +13,20 @@ export default class ObstacleRounded extends ObjetGraphique {
         ctx.translate(this.x, this.y);
         ctx.beginPath();
 
-        ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
 
         ctx.arc(0, 0, this.r, 0, 2*Math.PI);
+        ctx.lineWidth = 0;
+        ctx.fillStyle = "rgba(0, 0, 0, 0)";
+ 
         ctx.fill();
 
+
         //fond transparent
-
-        ctx.strokeStyle="blue";
-        ctx.lineWidth=2;
-
+        //ctx.strokeStyle="blue";
+        //ctx.lineWidth=2;
 
 
-
-        ctx.stroke();
+        //ctx.stroke();
         ctx.restore();
     }
 

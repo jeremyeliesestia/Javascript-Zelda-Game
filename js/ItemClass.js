@@ -12,7 +12,7 @@ export default class Item extends ObjetGraphique {
 
     draw(ctx) {
         ctx.save();
-        this.drawBoundingBox(ctx);
+        //this.drawBoundingBox(ctx);
         ctx.translate(this.x, this.y);
         ctx.drawImage(this.spriteTableau[this.numeroSprite], 0, 0, this.l, this.h);
         ctx.restore();

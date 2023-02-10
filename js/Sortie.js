@@ -14,7 +14,7 @@ export default class Sortie extends ObjetGraphique {
     draw(ctx) {
 
         ctx.save();
-        this.drawBoundingBox(ctx); 
+        //this.drawBoundingBox(ctx); 
         ctx.translate(this.x, this.y);
         ctx.drawImage(this.sprite, 0, -14  , 102/2, 174/2 );
 
