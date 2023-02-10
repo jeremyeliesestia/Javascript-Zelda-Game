@@ -11,6 +11,7 @@ import Sortie from './Sortie.js';
 import ObstacleRounded from './ObstacleRounded.js';
 
 
+
 let canvas, ctx;
 let gameState = 'menuStart';
 let joueur, sortie;
@@ -20,6 +21,10 @@ let assets;
 
 let coeur;
 let timeSprite = 0;
+var musiqueOn = true;
+var textVisible = true;
+var lastBlinkTime = 0;
+var blinkInterval = 500; // La fréquence de clignotement en millisecondes
 let timeSpriteHeart = 0;
 let positionTableau = 0;
 
@@ -30,13 +35,14 @@ var assetsToLoadURLs = {
     bell: { url: "https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/images/bells.png" },
     spriteSheetBunny: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/images/bunnySpriteSheet.png' },
     plop: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/sounds/plop.mp3', buffer: false, loop: false, volume: 1.0 },
-    victory: { url: '../assets/audio/victory.wav', buffer: false, loop: false, volume: 1.0 },
+    victory: { url: '../assets/sounds/LTTP_Secret.wav', buffer: false, loop: false, volume: 1.0 },
     humbug: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/sounds/humbug.mp3', buffer: true, loop: true, volume: 0.5 },
     concertino: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/sounds/christmas_concertino.mp3', buffer: true, loop: true, volume: 1.0 },
     xmas: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/sounds/xmas.mp3', buffer: true, loop: true, volume: 0.6 },
     linkForestMusic: { url: '../assets/audio/overworld_theme.mp3', buffer: true, loop: true, volume: 0.5 },
-    backinblack: { url: '../assets/audio/backinblack.m4a', buffer: true, loop: true, volume: 0.1  }
-
+    backinblack: { url: '../assets/audio/backinblack.m4a', buffer: true, loop: true, volume: 0.1  },
+    menuMusic: { url: '../assets/sounds/select_screen.mp3', buffer: true, loop: true, volume: 0.5 },
+    BackgroundMenu: { url: '../assets/images/menuGame.png' },
 };
 
 // Bonne pratique : on attend que la page soit chargée
@@ -63,7 +69,7 @@ function startGame(assetsLoaded) {
     console.log("StartGame : tous les assets sont chargés");
     //assets.backinblack.play();
 
-    assets.linkForestMusic.play()
+    assets.menuMusic.play()
 
    // On va prendre en compte le clavier
     ajouteEcouteursClavier();
@@ -107,6 +113,8 @@ function creerDesObstaclesLevel1() {
     tableauDesObjetsGraphiques.push(new ObstacleRounded(920, 270, 70));
     tableauDesObjetsGraphiques.push(new ObstacleRounded(870, 360, 70));
     tableauDesObjetsGraphiques.push(new ObstacleRounded(830, 460, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleAnime(400, 200, 70, 20, 1));
+
 }
 
 let tableauSpriteItems = [];
@@ -316,17 +324,38 @@ function afficheEcranDebutNiveau(ctx) {
     ctx.restore();
 }
 function afficheMenuStart(ctx) {
-    ctx.save()
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.drawImage(assets.BackgroundMenu, 0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'white';
-    ctx.font = "130px Arial";
-    ctx.fillText("Press space to start", 190, 100);
-    ctx.strokeText("Press space to start", 190, 100);
+    ctx.font = "50px Arial";
+    var textWidth = ctx.measureText("Press space to start").width;
+    var x = (canvas.width - textWidth) / 2;
+    var y = canvas.height - 50;
+    var currentTime = Date.now();
+    if (currentTime - lastBlinkTime >= blinkInterval) {
+        textVisible = !textVisible;
+        lastBlinkTime = currentTime;
+    }
+    if (textVisible) {
+        ctx.fillText("Press space to start", x, y);
+        ctx.strokeText("Press space to start", x, y);
+    }
     if (inputState.space) {
+        assets.menuMusic.pause();
         gameState = 'jeuEnCours';
+        assets.linkForestMusic.play();
     }
     ctx.restore();
+}
+
+// Pour allumer/éteindre la musique
+function toggleMusic() {
+    musiqueOn = !musiqueOn;
+    if (musiqueOn) {
+        assets.menuMusic.play();
+    } else {
+        assets.menuMusic.pause();
+    }
 }
 function afficheGameOver(ctx) {
     ctx.save();
@@ -336,6 +365,7 @@ function afficheGameOver(ctx) {
     ctx.font = "130px Arial";
     ctx.fillText("GAME OVER", 190, 100);
     ctx.strokeText("GAME OVER", 190, 100);
+    assets.menuMusic.play();
     if (inputState.space) {
         gameState = 'menuStart';
         joueur.x = 0;
@@ -358,6 +388,7 @@ function testeEtatClavierPourJoueur() {
 
     }
 }
+
 function detecteCollisionJoueurAvecObstacles() {
     let collisionExist = false;
     let currentObstacle = null;

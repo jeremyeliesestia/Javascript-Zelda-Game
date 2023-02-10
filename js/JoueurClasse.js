@@ -277,6 +277,9 @@ export default class Joueur extends ObjetGraphique {
 
     }
 
+    
+    
+
     followMouse(mousePos) {
         this.x = mousePos.x - this.l / 2;
         this.y = mousePos.y - this.h / 2;

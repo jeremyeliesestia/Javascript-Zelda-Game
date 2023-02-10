@@ -17,6 +17,7 @@ export default class ObjetGraphique {
         // et on le restaure à la fin de la fonction
         ctx.restore();
     }
+    
     drawBoundingBox(ctx) {
         // Bonne pratique, quand on change la couleur, la position du repère, etc.
         // les ombres, par exemple, on sauvegarde le contexte avant de le modifier

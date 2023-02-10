@@ -26,4 +26,29 @@ function circRectsOverlap(x0, y0, w0, h0, cx, cy, r) {
     return (((cx - testX) * (cx - testX) + (cy - testY) * (cy - testY)) < r * r);
 }
 
+/*si link est blesser*/
+
+function link_collison_avec_ennemy(enemy){
+    if(!pause){
+        if(!T_hurt.enabled){
+            link_life--;
+            if(bool_song){
+                if(link_life != 0){
+                    rand_hurt = Math.floor(Math.random()*3+1);
+                    switch(rand_hurt){
+                        case 1 : hurt1.play(); break;
+                        case 2 : hurt2.play(); break;
+                        case 3 : hurt3.play(); break;
+                    }
+                }
+            }
+        }
+        T_hurt.enabled = true;
+        if(T_hurt.tick >= 10){
+            T_hurt.enabled = false;
+            T_hurt.tick = 0;
+        }
+    }
+}
+
 export { rectsOverlap, circleCollide, circRectsOverlap }
