@@ -39,7 +39,7 @@ export default class ObstacleAnime extends Obstacle {
         }
         
         ctx.save();
-        this.drawBoundingBox(ctx);
+        //this.drawBoundingBox(ctx);
         ctx.translate(this.x, this.y);
         ctx.drawImage(this.sprite, 0, 0);
         ctx.restore();
