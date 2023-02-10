@@ -10,6 +10,7 @@ import Sortie from './Sortie.js';
 import ObstacleRounded from './ObstacleRounded.js';
 
 
+
 let canvas, ctx;
 let gameState = 'menuStart';
 let joueur, sortie;
@@ -86,6 +87,7 @@ function creerDesObstaclesLevel1() {
     tableauDesObjetsGraphiques.push(new ObstacleRounded(578, 155, 70));
     tableauDesObjetsGraphiques.push(new ObstacleRounded(195, 378, 70));
     tableauDesObjetsGraphiques.push(new ObstacleRounded(610, 378, 70));
+    tableauDesObjetsGraphiques.push(new ObstacleAnime(400, 200, 70, 20, 1));
 }
 var y = 0;
 function animationLoop() {
@@ -212,6 +214,7 @@ function testeEtatClavierPourJoueur() {
 
     }
 }
+
 function detecteCollisionJoueurAvecObstacles() {
     let collisionExist = false;
     let currentObstacle = null;

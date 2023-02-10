@@ -4,6 +4,11 @@ h1 {
     justify-content: center;
 }
 
+.background{
+    background-image: url(https://play.nintendo.com/images/2X1_LoZ_NewYear2017_Wallpaper.58e179fa.98557231.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
 #myCanvas {
     border: 1px solid black;
     background-color: lightgray;
