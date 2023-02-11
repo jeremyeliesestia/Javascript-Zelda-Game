@@ -20,6 +20,8 @@ let tableauDesObjetsGraphiques = [];
 let assets;
 
 let coeur;
+let monster;
+let monster2;
 let timeSprite = 0;
 var musiqueOn = true;
 var textVisible = true;
@@ -69,15 +71,14 @@ function startGame(assetsLoaded) {
     console.log("StartGame : tous les assets sont chargés");
     //assets.backinblack.play();
 
-    assets.menuMusic.play()
+    assets.menuMusic.play();
 
    // On va prendre en compte le clavier
     ajouteEcouteursClavier();
     ajouteEcouteurSouris();
 
     // On va créer un joueur
-    creerTableauSpritePlayer()
-    //joueur = new Joueur(100, 0, 50, 50, assets.joueur, 3);
+    creerTableauSpritePlayer();
     joueur = new Joueur(50, 240, 50, 50, 3, tableauSpritePlayer);
 
     tableauDesObjetsGraphiques.push(joueur);
@@ -87,9 +88,10 @@ function startGame(assetsLoaded) {
     tableauDesObjetsGraphiques.push(sortie);
 
     // et des obstacles
+    creerTableauDesItemsLevel1();
+    creerTableauSpritePlayer();
+    creerTableauSpriteMonsterLevel1();
     creerDesObstaclesLevel1();
-    creerTableauDesItemsLevel1()
-    creerTableauSpritePlayer()
     requestAnimationFrame(animationLoop);
 }
 
@@ -113,8 +115,7 @@ function creerDesObstaclesLevel1() {
     tableauDesObjetsGraphiques.push(new ObstacleRounded(920, 270, 70));
     tableauDesObjetsGraphiques.push(new ObstacleRounded(870, 360, 70));
     tableauDesObjetsGraphiques.push(new ObstacleRounded(830, 460, 70));
-    tableauDesObjetsGraphiques.push(new ObstacleAnime(400, 200, 70, 20, 1));
-
+    //tableauDesObjetsGraphiques.push(new ObstacleAnime(400, 200, 70, 20, 1, tableauSpriteMonster, 'vertical'));
 }
 
 let tableauSpriteItems = [];
@@ -130,8 +131,53 @@ function creerTableauDesItemsLevel1(){
     tableauDesObjetsGraphiques.push(coeur);
 }
 
+let tableauSpriteMonster= [];
+function creerTableauSpriteMonsterLevel1(){
+    
+    let directionMonster= null;
+    let i = 1;
+
+    //player down
+    directionMonster = "OctopusSpriteDown";
+        for (i=1;i<5;i++){
+            let url = new Image();
+            url.src = "../assets/images/OctopusSprite/" + directionMonster + "/" + i + "_octorock.png";
+            tableauSpriteMonster.push(url)    
+        }
+
+    //player left
+    directionMonster = "OctopusSpriteLeft";
+        for (i=1;i<5;i++){
+            let url = new Image();
+            url.src = "../assets/images/OctopusSprite/" + directionMonster + "/" + i + "_octorock.png";
+            tableauSpriteMonster.push(url)    
+        }
 
 
+    //player right
+    directionMonster = "OctopusSpriteRight";
+        for (i=1;i<5;i++){
+            let url = new Image();
+            url.src = "../assets/images/OctopusSprite/" + directionMonster + "/" + i + "_octorock.png";
+            tableauSpriteMonster.push(url)    
+        }
+
+    //player up
+    directionMonster = "OctopusSpriteUp";
+        for (i=1;i<5;i++){
+            let url = new Image();
+            url.src = "../assets/images/OctopusSprite/" + directionMonster + "/" + i + "_octorock.png";
+            tableauSpriteMonster.push(url)    
+        }
+
+        monster = new ObstacleAnime(450, 100, 70, 20, 0.8, tableauSpriteMonster, "vertical", 100, 250);
+        tableauDesObjetsGraphiques.push(monster);
+
+        monster2 = new ObstacleAnime(250, 250, 70, 20, 0.8, tableauSpriteMonster, "horizontal", 250, 580);
+        tableauDesObjetsGraphiques.push(monster2);
+
+
+}
 
 let tableauSpritePlayer = [];
 function creerTableauSpritePlayer(){
@@ -241,6 +287,7 @@ function animationLoop() {
             // 2 - On dessine le nouveau contenu
             tableauDesObjetsGraphiques.forEach(o => {
                 o.draw(ctx);
+                
             });
 
             // 3 - on déplace les objets
@@ -250,7 +297,6 @@ function animationLoop() {
             if (timeSprite == 60) {
                 timeSprite = 0;
             }
-
 
             //timer pour le sprite du coeur
             timeSpriteHeart += 1;
@@ -262,6 +308,13 @@ function animationLoop() {
                 }
                 timeSpriteHeart = 0;
             }
+
+
+
+            
+
+            monster.spriteMvt(timeSprite);
+            monster2.spriteMvt(timeSprite);
 
 
 
