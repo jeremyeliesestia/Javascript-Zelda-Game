@@ -18,6 +18,8 @@ let tableauDesObjetsGraphiquesLv2 = [];
 let assets;
 let coeur;
 let coeur2;
+let rubyListLv1 = [];
+let rubyListLv2 = [];
 let monster;
 let monster2;
 let monster3;
@@ -27,7 +29,9 @@ var textVisible = true;
 var lastBlinkTime = 0;
 var blinkInterval = 500; // La fréquence de clignotement en millisecondes
 let timeSpriteHeart = 0;
-let positionTableau = 0;
+let timeSpriteRuby = 0;
+let positionTableauHeart = 0;
+let positionTableauRuby = 0;
 
 var assetsToLoadURLs = {
     backgroundImageLv1: { url: "../assets/images/haunted_grove.png"},
@@ -167,20 +171,77 @@ function creerDesObstaclesLevel2(){
 
 }
 
-let tableauSpriteItems = [];
+let tableauSpriteItemsHeart = [];
+
+let tableauSpriteItemsGreenRuby = [];
+let tableauSpriteItemsRedRuby = [];
+let tableauSpriteItemsYellowRuby = [];
+
+
 function creerTableauDesItems(){
     
     //coeur
     for (let i=16;i<24; i++){
         let url = new Image();
         url.src = "../assets/images/Items/" + i + "_Items.png";
-        tableauSpriteItems.push(url)    
+        tableauSpriteItemsHeart.push(url)    
     }
-    coeur = new Item(370, 260, 40, 40, tableauSpriteItems);
+
+    //green ruby
+    for (let i=12;i<16; i++){
+        let url = new Image();
+        url.src = "../assets/images/rubySprite/greenRuby/" + i + "_Items.png";
+        tableauSpriteItemsGreenRuby.push(url)    
+    }
+
+    //red ruby
+    for (let i=28;i<32; i++){
+        let url = new Image();
+        url.src = "../assets/images/rubySprite/redRuby/" + i + "_Items.png";
+        tableauSpriteItemsRedRuby.push(url)    
+    }
+
+    //yellow ruby
+    for (let i=44;i<48; i++){
+        let url = new Image();
+        url.src = "../assets/images/rubySprite/yellowRuby/" + i + "_Items.png";
+        tableauSpriteItemsYellowRuby.push(url)    
+    }
+
+
+    coeur = new Item(370, 260, 40, 40, tableauSpriteItemsHeart);
     tableauDesObjetsGraphiquesLv1.push(coeur);
 
-    coeur2 = new Item(80, 70, 40, 40, tableauSpriteItems);
+    rubyListLv1.push(new Item(215, 260, 40, 40, tableauSpriteItemsGreenRuby));
+    rubyListLv1.push(new Item(240, 35, 40, 40, tableauSpriteItemsGreenRuby));
+    rubyListLv1.push(new Item(700, 150, 40, 40, tableauSpriteItemsGreenRuby));
+    rubyListLv1.push(new Item(700, 400, 40, 40, tableauSpriteItemsGreenRuby));
+    rubyListLv1.push(new Item(528, 261, 40, 40, tableauSpriteItemsRedRuby));
+
+    rubyListLv1.forEach(ruby => {
+        tableauDesObjetsGraphiquesLv1.push(ruby);
+    });
+
+
+
+
+
+    coeur2 = new Item(80, 70, 40, 40, tableauSpriteItemsHeart);
     tableauDesObjetsGraphiquesLv2.push(coeur2);
+
+    rubyListLv2.push(new Item(120, 160, 40, 40, tableauSpriteItemsGreenRuby));
+    rubyListLv2.push(new Item(120, 220, 40, 40, tableauSpriteItemsGreenRuby));
+    rubyListLv2.push(new Item(120, 280, 40, 40, tableauSpriteItemsGreenRuby));
+    rubyListLv2.push(new Item(120, 340, 40, 40, tableauSpriteItemsGreenRuby));
+    rubyListLv2.push(new Item(120, 400, 40, 40, tableauSpriteItemsGreenRuby));
+    rubyListLv2.push(new Item(480, 150, 40, 40, tableauSpriteItemsYellowRuby));
+    rubyListLv2.push(new Item(570, 360, 40, 40, tableauSpriteItemsRedRuby));
+    rubyListLv2.push(new Item(600, 360, 40, 40, tableauSpriteItemsRedRuby));
+
+    rubyListLv2.forEach(ruby => {
+        tableauDesObjetsGraphiquesLv2.push(ruby);
+    });
+
 }
 
 let tableauSpriteMonster= [];
@@ -385,15 +446,33 @@ function animationLoop() {
                 timeSprite = 0;
             }
 
+
             //timer pour le sprite du coeur
             timeSpriteHeart += 1;
             if (timeSpriteHeart == 5) {
-                coeur.spriteMvt(positionTableau);
-                positionTableau += 1;
-                if (positionTableau == 8) {
-                    positionTableau = 0;
+                coeur.spriteMvt(positionTableauHeart);
+                positionTableauHeart += 1;
+                if (positionTableauHeart == 8) {
+                    positionTableauHeart = 0;
                 }
                 timeSpriteHeart = 0;
+            }
+
+            //timer pour le sprite du ruby
+            timeSpriteRuby += 1;
+            if (timeSpriteRuby == 10) {
+
+                rubyListLv1.forEach(ruby => {
+                
+                    ruby.spriteMvt(positionTableauRuby);
+                    positionTableauRuby += 1;
+                    if (positionTableauRuby == 4) {
+                        positionTableauRuby = 0;
+                    }
+
+                }
+                );
+                timeSpriteRuby = 0;
             }
 
             monster.spriteMvt(timeSprite);
@@ -447,12 +526,29 @@ function animationLoop() {
             //timer pour le sprite du coeur
             timeSpriteHeart += 1;
             if (timeSpriteHeart == 5) {
-                coeur2.spriteMvt(positionTableau);
-                positionTableau += 1;
-                if (positionTableau == 8) {
-                    positionTableau = 0;
+                coeur2.spriteMvt(positionTableauHeart);
+                positionTableauHeart += 1;
+                if (positionTableauHeart == 8) {
+                    positionTableauHeart = 0;
                 }
                 timeSpriteHeart = 0;
+            }
+
+            //timer pour le sprite du ruby
+            timeSpriteRuby += 1;
+            if (timeSpriteRuby == 10) {
+
+                rubyListLv2.forEach(ruby => {
+                
+                    ruby.spriteMvt(positionTableauRuby);
+                    positionTableauRuby += 1;
+                    if (positionTableauRuby == 4) {
+                        positionTableauRuby = 0;
+                    }
+
+                }
+                );
+                timeSpriteRuby = 0;
             }
 
             monster3.spriteMvt(timeSprite);
@@ -539,6 +635,13 @@ function afficheMenuNiveau(ctx) {
             heart1.numero = 0;
             heart2.numero = 0;
             heart3.numero = 0;
+
+            timeSprite = 0;
+            timeSpriteHeart = 0;
+            timeSpriteRuby = 0;
+            positionTableauHeart = 0;
+            positionTableauRuby = 0;
+
         }
      }
 
@@ -552,6 +655,12 @@ function afficheMenuNiveau(ctx) {
             heart1.numero = 0;
             heart2.numero = 0;
             heart3.numero = 0;
+
+            timeSprite = 0;
+            timeSpriteHeart = 0;
+            timeSpriteRuby = 0;
+            positionTableauHeart = 0;
+            positionTableauRuby = 0;
         }
     }
 
