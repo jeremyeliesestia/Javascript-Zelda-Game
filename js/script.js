@@ -32,6 +32,7 @@ let timeSpriteHeart = 0;
 let timeSpriteRuby = 0;
 let positionTableauHeart = 0;
 let positionTableauRuby = 0;
+let score = 0;
 
 var assetsToLoadURLs = {
     backgroundImageLv1: { url: "../assets/images/haunted_grove.png"},
@@ -41,8 +42,10 @@ var assetsToLoadURLs = {
     menuMusic: { url: '../assets/sounds/select_screen.mp3', buffer: true, loop: true, volume: 0.5 },
     hitMusic: { url: '../assets/sounds/LTTP_Enemy_Hit.wav', buffer: true, loop: false, volume: 0.8 },
     victoryMusic: { url: '../assets/sounds/LTTP_Secret.wav', buffer: true, loop: false, volume: 0.8  },
+    getRuby: { url: '../assets/audio/sounds/LTTP_Get_Ruby.wav', buffer: true, loop: false, volume: 0.8  },
     heartCharge: { url: '../assets/sounds/LTTP_Heart_Charge.wav', buffer: true, loop: false, volume: 0.8  },
     BackgroundMenu: { url: '../assets/images/menuGame.png' },
+    coinScore: { url: '../assets/images/coin_sprite.png' },
     menuLevel: { url: '../assets/images/menuLevel.png' }
 };
 
@@ -172,7 +175,6 @@ function creerDesObstaclesLevel2(){
 }
 
 let tableauSpriteItemsHeart = [];
-
 let tableauSpriteItemsGreenRuby = [];
 let tableauSpriteItemsRedRuby = [];
 let tableauSpriteItemsYellowRuby = [];
@@ -209,35 +211,28 @@ function creerTableauDesItems(){
     }
 
 
-    coeur = new Item(370, 260, 40, 40, tableauSpriteItemsHeart);
+    coeur = new Item(370, 260, 40, 40, tableauSpriteItemsHeart, 'coeur');
     tableauDesObjetsGraphiquesLv1.push(coeur);
 
-    rubyListLv1.push(new Item(215, 260, 40, 40, tableauSpriteItemsGreenRuby));
-    rubyListLv1.push(new Item(240, 35, 40, 40, tableauSpriteItemsGreenRuby));
-    rubyListLv1.push(new Item(700, 150, 40, 40, tableauSpriteItemsGreenRuby));
-    rubyListLv1.push(new Item(700, 400, 40, 40, tableauSpriteItemsGreenRuby));
-    rubyListLv1.push(new Item(528, 261, 40, 40, tableauSpriteItemsRedRuby));
+    rubyListLv1.push(new Item(215, 240, 40, 40, tableauSpriteItemsGreenRuby, 'ruby_green'));
+    rubyListLv1.push(new Item(210, 15, 40, 40, tableauSpriteItemsGreenRuby, 'ruby_green'));
+    rubyListLv1.push(new Item(700, 150, 40, 40, tableauSpriteItemsGreenRuby, 'ruby_green'));
+    rubyListLv1.push(new Item(700, 400, 40, 40, tableauSpriteItemsGreenRuby, 'ruby_green'));
+    rubyListLv1.push(new Item(528, 240, 40, 40, tableauSpriteItemsRedRuby, 'ruby_red'));
+    rubyListLv1.push(new Item(580, 15, 40, 40, tableauSpriteItemsYellowRuby, 'ruby_yellow'));
+
 
     rubyListLv1.forEach(ruby => {
         tableauDesObjetsGraphiquesLv1.push(ruby);
     });
 
-
-
-
-
-    coeur2 = new Item(80, 70, 40, 40, tableauSpriteItemsHeart);
+    coeur2 = new Item(80, 70, 40, 40, tableauSpriteItemsHeart, 'coeur');
     tableauDesObjetsGraphiquesLv2.push(coeur2);
 
-    rubyListLv2.push(new Item(120, 160, 40, 40, tableauSpriteItemsGreenRuby));
-    rubyListLv2.push(new Item(120, 220, 40, 40, tableauSpriteItemsGreenRuby));
-    rubyListLv2.push(new Item(120, 280, 40, 40, tableauSpriteItemsGreenRuby));
-    rubyListLv2.push(new Item(120, 340, 40, 40, tableauSpriteItemsGreenRuby));
-    rubyListLv2.push(new Item(120, 400, 40, 40, tableauSpriteItemsGreenRuby));
-    rubyListLv2.push(new Item(480, 150, 40, 40, tableauSpriteItemsYellowRuby));
-    rubyListLv2.push(new Item(570, 360, 40, 40, tableauSpriteItemsRedRuby));
-    rubyListLv2.push(new Item(600, 360, 40, 40, tableauSpriteItemsRedRuby));
-
+    rubyListLv2.push(new Item(655, 350, 40, 40, tableauSpriteItemsGreenRuby, 'ruby_green'));
+    rubyListLv2.push(new Item(450, 130, 40, 40, tableauSpriteItemsRedRuby, 'ruby_red'));
+    rubyListLv2.push(new Item(110, 280, 40, 40, tableauSpriteItemsYellowRuby, 'ruby_yellow'));
+    
     rubyListLv2.forEach(ruby => {
         tableauDesObjetsGraphiquesLv2.push(ruby);
     });
@@ -432,6 +427,10 @@ function animationLoop() {
         case 'jeuEnCoursLv1':
 
             ctx.drawImage(assets.backgroundImageLv1, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(assets.coinScore, 140, 15, 40, 40);
+            ctx.fillStyle = 'white';
+            ctx.font = "25px arial";
+            ctx.fillText(score, 190, 45 );
 
             // 2 - On dessine le nouveau contenu
             tableauDesObjetsGraphiquesLv1.forEach(o => {
@@ -506,11 +505,16 @@ function animationLoop() {
             testCollisionAvecMonsterLv1();
             detecteCollisionJoueurAvecSortie();
             detecteCollisionJoueurCoeur();
+            detecteCollisionJoueurRubyLv1();
             break;
 
         case 'jeuEnCoursLv2':
 
             ctx.drawImage(assets.backgroundImageLv2, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(assets.coinScore, 140, 15, 40, 40);
+            ctx.fillStyle = 'white';
+            ctx.font = "25px arial";
+            ctx.fillText(score, 190, 45 );
 
             tableauDesObjetsGraphiquesLv2.forEach(o => {
                 o.draw(ctx);
@@ -581,6 +585,7 @@ function animationLoop() {
             testCollisionAvecMonsterLv2();
             detecteCollisionJoueurAvecSortie();
             detecteCollisionJoueurCoeur();
+            detecteCollisionJoueurRubyLv2();            
             break;
     
         } 
@@ -599,8 +604,8 @@ function afficheMenuStart(ctx) {
     ctx.drawImage(assets.BackgroundMenu, 0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'white';
 
-    ctx.font = "40px arial";
-    var textWidth = ctx.measureText("Press space to start").width;
+    ctx.font = "30px arial";
+    var textWidth = ctx.measureText("JOUER (Space)").width;
     var x = (canvas.width - textWidth) / 2;
     var y = canvas.height - 25;
     var currentTime = Date.now();
@@ -609,14 +614,15 @@ function afficheMenuStart(ctx) {
         lastBlinkTime = currentTime;
     }
     if (textVisible) {
-        ctx.fillText("Press space to start", x, y);
-        ctx.strokeText("Press space to start", x, y);
+        ctx.fillText("JOUER (Space)", x, y);
+        ctx.strokeText("JOUER (Space)", x, y);
     }
     if (inputState.space) {
         assets.menuMusic.pause();
         gameState = 'menuNiveau';
     }
-    ctx.restore();
+    score = 0;
+    ctx.restore(); 
 }
 
 function afficheMenuNiveau(ctx) { 
@@ -670,12 +676,19 @@ function afficheMenuNiveau(ctx) {
 function afficheGameOver(ctx) {
 
     ctx.save();
-    ctx.drawImage(assets.gameOverAssets, 222, 137, canvas.width/3, canvas.height/3);
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = 'grey';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(assets.gameOverAssets, 220, 110, canvas.width/2, canvas.height/2);
 
-    if (inputState.space) {
+    ctx.fillStyle = 'white';
+    ctx.font = "25px arial";
+    ctx.fillText("RETOUR AU MENU (Enter)", 285, 450 );
+
+    if (inputState.enter) {
+        assets.menuMusic.play();
         gameState = 'menuStart';
         joueur.x = 0;
+        score = 0;
     }
 
     ctx.restore();
@@ -1016,7 +1029,7 @@ function detecteCollisionJoueurCoeur() {
     let currentObstacle;
 
     tableauDesObjetsGraphiquesLv1.forEach(o => {
-        if (o instanceof Item) {
+        if (o instanceof Item && o.type == 'coeur') {
             if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
                 collisionExist = true;
                 currentObstacle = o;
@@ -1028,7 +1041,7 @@ function detecteCollisionJoueurCoeur() {
     );
 
     tableauDesObjetsGraphiquesLv2.forEach(o => {
-        if (o instanceof Item) {
+        if (o instanceof Item && o.type == 'coeur') {
             if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
                 collisionExist = true;
                 currentObstacle = o;
@@ -1059,4 +1072,71 @@ function detecteCollisionJoueurCoeur() {
         }
 
     }
+}
+
+function detecteCollisionJoueurRubyLv1() {
+
+    let collisionExist = false;
+    let rubyType;
+    let currentObstacle;
+
+    tableauDesObjetsGraphiquesLv1.forEach(o => {
+            if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
+                if (o instanceof Item && (o.type == 'ruby_green' || o.type == 'ruby_red' || o.type == 'ruby_yellow')) {
+                    collisionExist = true;
+                    rubyType = o.type;
+                    console.log("CHUI LA ");
+                    currentObstacle = o;
+                    let index = tableauDesObjetsGraphiquesLv1.indexOf(currentObstacle);
+                    tableauDesObjetsGraphiquesLv1.splice(index, 1);
+                }
+            }
+    }
+    );
+
+    if (collisionExist == true) {
+        assets.getRuby.play();
+        if (rubyType == 'ruby_green'){
+            score += 100;
+        } else if(rubyType == 'ruby_red'){
+            score += 250;
+        } else if (rubyType == 'ruby_yellow'){
+            score += 500;
+        }
+        console.log("HOP LA DES SOUS");
+    }
+
+}
+
+function detecteCollisionJoueurRubyLv2() {
+
+    let collisionExist = false;
+    let rubyType;
+    let currentObstacle;
+
+    tableauDesObjetsGraphiquesLv2.forEach(o => {
+        if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
+            if (o instanceof Item && (o.type == 'ruby_green' || o.type == 'ruby_red' || o.type == 'ruby_yellow')) {
+                collisionExist = true;
+                rubyType = o.type;
+                currentObstacle = o;
+                let index = tableauDesObjetsGraphiquesLv2.indexOf(currentObstacle);
+                tableauDesObjetsGraphiquesLv2.splice(index, 1);
+            }
+        }
+    }
+    );
+
+    if (collisionExist == true) {
+        assets.getRuby.play();
+        if (rubyType == 'ruby_green'){
+            score += 100;
+        } else if(rubyType == 'ruby_red'){
+            score += 250;
+        } else if (rubyType == 'ruby_yellow'){
+            score += 500;
+        }
+        console.log("HOP LA DES SOUS");
+    }
+
 }
