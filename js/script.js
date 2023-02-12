@@ -4,6 +4,7 @@ import Item from './ItemClass.js';
 import ObstacleAnime from './ObstacleAnime.js';
 import ObstacleAnimeClignotant from './ObstacleAnimeClignotant.js';
 import ObstacleTexture from './ObstacleTexture.js';
+import hud from './hud.js';
 import { ajouteEcouteurSouris, ajouteEcouteursClavier,ajouteEcouteurClickSourie, inputState, mousePos } from './ecouteurs.js';
 import { circRectsOverlap, rectsOverlap } from './collisions.js';
 import { loadAssets } from './assets.js';
@@ -88,7 +89,7 @@ function startGame(assetsLoaded) {
 
     // On va créer un joueur
     creerTableauSpritePlayer();
-    joueur = new Joueur(50, 240, 50, 50, 3, tableauSpritePlayer);
+    joueur = new Joueur(50, 240, 50, 50, 6, tableauSpritePlayer);
     tableauDesObjetsGraphiquesLv1.push(joueur);
     tableauDesObjetsGraphiquesLv2.push(joueur);
 
@@ -106,6 +107,7 @@ function startGame(assetsLoaded) {
     creerDesObstaclesLevel1();
     creerDesObstaclesLevel2();
 
+    initializeHeart();
 
     requestAnimationFrame(animationLoop);
 }
@@ -179,9 +181,6 @@ function creerDesObstaclesLevel2(){
 
 
 }
-
-
-
 
 let tableauSpriteItems = [];
 function creerTableauDesItems(){
@@ -336,6 +335,30 @@ function creerTableauSpritePlayer(){
 
 }
 
+let tableauSpriteHeart = [];
+
+let coeur_1 = 0;
+let coeur_2 = 0;
+let coeur_3 = 0;
+
+function initializeHeart(){
+    let i;
+    for (i=1;i<4;i++){
+        let heart = new Image();
+        heart.src = "../assets/images/heartSprite/" + i + "_heart_sprite.png";
+        tableauSpriteHeart.push(heart)    
+    }
+
+    let heart1 = new hud(20, 15, 50, 50, tableauSpriteHeart, coeur_1);
+    let heart2 = new hud(55, 15, 50, 50, tableauSpriteHeart, coeur_2);
+    let heart3 = new hud(90, 15, 50, 50, tableauSpriteHeart, coeur_3);
+
+    tableauDesObjetsGraphiquesLv1.push(heart1);
+    tableauDesObjetsGraphiquesLv1.push(heart2);
+    tableauDesObjetsGraphiquesLv1.push(heart3);
+
+}
+
 var y = 0;
 function animationLoop() {
     // On va exécuter cette fonction 60 fois par seconde
@@ -412,6 +435,7 @@ function animationLoop() {
             //joueur.followMouse()
             joueur.testeCollisionAvecBordsDuCanvas(canvas.width, canvas.height);
             detecteCollisionJoueurAvecObstaclesLv1();
+            testCollisionAvecMonsterLv1();
             detecteCollisionJoueurAvecSortie();
             break;
 
@@ -574,6 +598,43 @@ function testeEtatClavierPourJoueur() {
     }
 }
 
+function testCollisionAvecMonsterLv1(){
+
+    let collisionExist = false;
+    
+    tableauDesObjetsGraphiquesLv1.forEach(o => {
+        
+        if (o instanceof ObstacleAnime) {
+            if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
+                collisionExist = true;
+            }
+        }
+    }
+    );
+
+    if (collisionExist) {
+
+        joueur.x -= 200;
+
+        if (coeur_1 == 1 || coeur_1 == 2){
+            heart1.loseLife();
+        } else if (coeur_2 == 1 || coeur_2 == 2){
+            heart2.loseLife();
+        } else if (coeur_3 == 1 || coeur_3 == 2){
+            heart3.loseLife();
+        }
+
+        if (coeur_3 == 3){
+            assets.linkForestMusic.stop();
+            gameState = 'gameOver';
+        }
+
+    }
+
+    console.log("COLLISION MONSTER" + coeur_1 + " " + coeur_2 + " " + coeur_3)
+
+}
+
 function detecteCollisionJoueurAvecObstaclesLv1() {
     let collisionExist = false;
     let currentObstacle = null;
@@ -655,9 +716,6 @@ function detecteCollisionJoueurAvecObstaclesLv1() {
 
 
         }
-
-
-
 
 
     } else {
