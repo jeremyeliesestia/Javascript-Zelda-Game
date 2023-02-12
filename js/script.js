@@ -404,7 +404,6 @@ function initializeHeart(){
 
 }
 
-var y = 0;
 function animationLoop() {
     // On va exécuter cette fonction 60 fois par seconde
     // pour créer l'illusion d'un mouvement fluide
@@ -504,7 +503,7 @@ function animationLoop() {
             detecteCollisionJoueurAvecObstaclesLv1();
             testCollisionAvecMonsterLv1();
             detecteCollisionJoueurAvecSortie();
-            detecteCollisionJoueurCoeur();
+            detecteCollisionJoueurCoeurLv1();
             detecteCollisionJoueurRubyLv1();
             break;
 
@@ -584,7 +583,7 @@ function animationLoop() {
             detecteCollisionJoueurAvecObstaclesLv2()
             testCollisionAvecMonsterLv2();
             detecteCollisionJoueurAvecSortie();
-            detecteCollisionJoueurCoeur();
+            detecteCollisionJoueurCoeurLv2();
             detecteCollisionJoueurRubyLv2();            
             break;
     
@@ -622,6 +621,7 @@ function afficheMenuStart(ctx) {
         gameState = 'menuNiveau';
     }
     score = 0;
+
     ctx.restore(); 
 }
 
@@ -1023,7 +1023,7 @@ function detecteCollisionJoueurAvecSortie() {
     }
 }
 
-function detecteCollisionJoueurCoeur() {
+function detecteCollisionJoueurCoeurLv1() {
 
     let collisionExist = false;
     let currentObstacle;
@@ -1039,6 +1039,33 @@ function detecteCollisionJoueurCoeur() {
         }
     }
     );
+
+    if (collisionExist) {
+        assets.heartCharge.play();
+
+        if (heart3.numero == 1){
+            heart3.gainLife();
+        } else if(heart3.numero == 0){
+            if (heart2.numero == 2){
+                heart2.gainLife();
+            }else if(heart2.numero == 1){
+                heart2.gainLife();
+            }else if(heart2.numero == 0){
+                if (heart1.numero == 2){
+                    heart1.gainLife();
+                }else if(heart1.numero == 1){
+                    heart1.gainLife();
+                }
+            }
+        }
+
+    }
+}
+
+function detecteCollisionJoueurCoeurLv2() {
+
+    let collisionExist = false;
+    let currentObstacle;
 
     tableauDesObjetsGraphiquesLv2.forEach(o => {
         if (o instanceof Item && o.type == 'coeur') {
