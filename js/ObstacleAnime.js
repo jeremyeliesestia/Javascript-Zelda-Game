@@ -74,8 +74,7 @@ export default class ObstacleAnime extends Obstacle {
         //this.drawBoundingBox(ctx);
         ctx.translate(this.x, this.y);
 
-        console.log(this.numeroSprite);
-        console.log(this.spriteTableau);
+
 
         ctx.drawImage(this.spriteTableau[this.numeroSprite], 0, 0, 50, 50);
         ctx.restore();

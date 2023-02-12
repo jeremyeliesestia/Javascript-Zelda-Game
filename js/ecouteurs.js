@@ -1,6 +1,24 @@
 let inputState = {}
 let mousePos = { x: 0, y: 0 }
 
+function ajouteEcouteurClickSourie() {
+    window.addEventListener("mousedown", function(event) {
+        console.log(event.button);
+
+        switch (event.button) {
+          case 0:
+            inputState.leftClick = true;
+            break;
+          case 1:
+            inputState.middleClick = true;
+            break;
+          case 2:
+            inputState.rightClick = true;
+            break;
+        }
+      }); 
+}
+
 function ajouteEcouteurSouris() {
     window.onmousemove = (event) => {
         // on récupère la positon de la souris et on
@@ -9,7 +27,7 @@ function ajouteEcouteurSouris() {
         var rect = event.target.getBoundingClientRect()
         mousePos.x = event.clientX - rect.left;
         mousePos.y = event.clientY - rect.top;
-        //console.log(mousePos);
+        console.log(mousePos);
     }
 }
 
@@ -32,9 +50,9 @@ function ajouteEcouteursClavier() {
             case 'ArrowDown':
                 inputState.down = true;
                 break;
-                case ' ':
-                    inputState.space = true;
-                    break;
+            case ' ':
+                inputState.space = true;
+                break;
         }
     }
 
@@ -52,12 +70,13 @@ function ajouteEcouteursClavier() {
                 break;
             case 'ArrowDown':
                 inputState.down = false;
-                break;
-                case ' ':
-                    inputState.space = false;
+            break;
+            case ' ':
+                inputState.space = false;
         }
     }
 
+
 }
 
-export { ajouteEcouteurSouris, ajouteEcouteursClavier, inputState, mousePos }
+export { ajouteEcouteurSouris, ajouteEcouteursClavier, ajouteEcouteurClickSourie, inputState, mousePos }
