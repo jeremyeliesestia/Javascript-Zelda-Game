@@ -3,6 +3,8 @@
 Nous avons developpé un jeu 2D en reprennant l'univers de "Zelda", ce jeu est composé de 2 niveaux jouables. 
 Le but est de retrouver la princesse Zelda au bout de chaque niveaux sans mourrir. Pour cela vous devez éviter les monstres qui se déplacent sur la carte et qui vous feront perdre de la vie...
 
+![App Screenshot](https://upload.wikimedia.org/wikipedia/commons/2/2a/Zelda_Logo.svg)
+
 
 ## Authors - ESTIA MBDS
 
