@@ -2,8 +2,6 @@ import Joueur from './JoueurClasse.js';
 import Obstacle from './ObstacleClass.js';
 import Item from './ItemClass.js';
 import ObstacleAnime from './ObstacleAnime.js';
-import ObstacleAnimeClignotant from './ObstacleAnimeClignotant.js';
-import ObstacleTexture from './ObstacleTexture.js';
 import hud from './hud.js';
 import { ajouteEcouteurSouris, ajouteEcouteursClavier,ajouteEcouteurClickSourie, inputState, mousePos } from './ecouteurs.js';
 import { circRectsOverlap, rectsOverlap } from './collisions.js';
@@ -11,19 +9,13 @@ import { loadAssets } from './assets.js';
 import Sortie from './Sortie.js';
 import ObstacleRounded from './ObstacleRounded.js';
 
-
-
 let canvas, ctx;
 let gameState = 'menuStart';
-let joueur, sortie1, sortie2, sortie3;
-let niveau = 1;
+let joueur, sortie1, sortie2;
 let tableauDesObjetsGraphiquesLv1 = [];
 let tableauDesObjetsGraphiquesLv2 = [];
-let tableauDesObjetsGraphiquesLv3 = [];
-
 
 let assets;
-
 let coeur;
 let coeur2;
 let monster;
@@ -31,7 +23,6 @@ let monster2;
 let monster3;
 let monster4;
 let timeSprite = 0;
-var musiqueOn = true;
 var textVisible = true;
 var lastBlinkTime = 0;
 var blinkInterval = 500; // La fréquence de clignotement en millisecondes
@@ -39,22 +30,16 @@ let timeSpriteHeart = 0;
 let positionTableau = 0;
 
 var assetsToLoadURLs = {
-    backgroundImageLv1: { url: "../assets/images/haunted_grove.png"}, // http://www.clipartlord.com/category/weather-clip-art/winter-clip-art/
+    backgroundImageLv1: { url: "../assets/images/haunted_grove.png"},
+    gameOverAssets: { url: "../assets/images/gameOver.png"},
     backgroundImageLv2: { url: "../assets/images/montain.png"},
-    backgroundImageLv3: { url: "../assets/images/dungeon.png"},
-    logo1: { url: "https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/images/SkywardWithoutBalls.png" },
-    logo2: { url: "https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/images/BoundsWithoutBalls.png" },
-    bell: { url: "https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/images/bells.png" },
-    spriteSheetBunny: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/images/bunnySpriteSheet.png' },
-    plop: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/sounds/plop.mp3', buffer: false, loop: false, volume: 1.0 },
-    victory: { url: '../assets/sounds/LTTP_Secret.wav', buffer: false, loop: false, volume: 1.0 },
-    humbug: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/sounds/humbug.mp3', buffer: true, loop: true, volume: 0.5 },
-    concertino: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/sounds/christmas_concertino.mp3', buffer: true, loop: true, volume: 1.0 },
-    xmas: { url: 'https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/sounds/xmas.mp3', buffer: true, loop: true, volume: 0.6 },
     linkForestMusic: { url: '../assets/audio/overworld_theme.mp3', buffer: true, loop: true, volume: 0.5 },
-    backinblack: { url: '../assets/audio/backinblack.m4a', buffer: true, loop: true, volume: 0.1  },
     menuMusic: { url: '../assets/sounds/select_screen.mp3', buffer: true, loop: true, volume: 0.5 },
+    hitMusic: { url: '../assets/sounds/LTTP_Enemy_Hit.wav', buffer: true, loop: false, volume: 0.8 },
+    victoryMusic: { url: '../assets/sounds/LTTP_Secret.wav', buffer: true, loop: false, volume: 0.8  },
+    heartCharge: { url: '../assets/sounds/LTTP_Heart_Charge.wav', buffer: true, loop: false, volume: 0.8  },
     BackgroundMenu: { url: '../assets/images/menuGame.png' },
+    menuLevel: { url: '../assets/images/menuLevel.png' }
 };
 
 // Bonne pratique : on attend que la page soit chargée
@@ -326,7 +311,7 @@ function creerTableauSpritePlayer(){
 
         //static
         typeMvt = "Static";
-        for (i=1;i<4;i++){
+        for (i=1;i<2;i++){
             let url = new Image();
             url.src = "../assets/images/LinkSprite/" + directionPlayer + "/" + typeMvt + "/" + i + "_link_sprite.png";
             tableauSpritePlayer.push(url)    
@@ -337,9 +322,9 @@ function creerTableauSpritePlayer(){
 
 let tableauSpriteHeart = [];
 
-let coeur_1 = 0;
-let coeur_2 = 0;
-let coeur_3 = 0;
+let heart1;
+let heart2;
+let heart3;
 
 function initializeHeart(){
     let i;
@@ -349,13 +334,17 @@ function initializeHeart(){
         tableauSpriteHeart.push(heart)    
     }
 
-    let heart1 = new hud(20, 15, 50, 50, tableauSpriteHeart, coeur_1);
-    let heart2 = new hud(55, 15, 50, 50, tableauSpriteHeart, coeur_2);
-    let heart3 = new hud(90, 15, 50, 50, tableauSpriteHeart, coeur_3);
+    heart1 = new hud(20, 15, 50, 50, tableauSpriteHeart);
+    heart2 = new hud(55, 15, 50, 50, tableauSpriteHeart);
+    heart3 = new hud(90, 15, 50, 50, tableauSpriteHeart);
 
     tableauDesObjetsGraphiquesLv1.push(heart1);
     tableauDesObjetsGraphiquesLv1.push(heart2);
     tableauDesObjetsGraphiquesLv1.push(heart3);
+
+    tableauDesObjetsGraphiquesLv2.push(heart1);
+    tableauDesObjetsGraphiquesLv2.push(heart2);
+    tableauDesObjetsGraphiquesLv2.push(heart3);
 
 }
 
@@ -437,6 +426,7 @@ function animationLoop() {
             detecteCollisionJoueurAvecObstaclesLv1();
             testCollisionAvecMonsterLv1();
             detecteCollisionJoueurAvecSortie();
+            detecteCollisionJoueurCoeur();
             break;
 
         case 'jeuEnCoursLv2':
@@ -468,7 +458,6 @@ function animationLoop() {
             monster3.spriteMvt(timeSprite);
             monster4.spriteMvt(timeSprite);
 
-
             if(inputState.left){
                 joueur.spriteMvt('left', timeSprite);
             }
@@ -493,8 +482,9 @@ function animationLoop() {
 
             joueur.testeCollisionAvecBordsDuCanvas(canvas.width, canvas.height);
             detecteCollisionJoueurAvecObstaclesLv2()
+            testCollisionAvecMonsterLv2();
             detecteCollisionJoueurAvecSortie();
-
+            detecteCollisionJoueurCoeur();
             break;
     
         } 
@@ -508,13 +498,15 @@ function animationLoop() {
 }
 
 function afficheMenuStart(ctx) {
+
     ctx.save();
     ctx.drawImage(assets.BackgroundMenu, 0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'white';
-    ctx.font = "50px Arial";
+
+    ctx.font = "40px arial";
     var textWidth = ctx.measureText("Press space to start").width;
     var x = (canvas.width - textWidth) / 2;
-    var y = canvas.height - 50;
+    var y = canvas.height - 25;
     var currentTime = Date.now();
     if (currentTime - lastBlinkTime >= blinkInterval) {
         textVisible = !textVisible;
@@ -531,35 +523,35 @@ function afficheMenuStart(ctx) {
     ctx.restore();
 }
 
-function afficheMenuNiveau(ctx) {
+function afficheMenuNiveau(ctx) { 
 
     ctx.save();
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(assets.menuLevel, 0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'white';
-    ctx.font = "40px Arial";
-    ctx.fillText("NIVEAU 1", 190, 100);
-    ctx.fillText("NIVEAU 2", 190, 200);
-    ctx.fillText("NIVEAU 3", 190, 300);
-
  
-    if (mousePos.x > 190 && mousePos.x < 370 && mousePos.y > 70 && mousePos.y < 100) {  
+    if (mousePos.x > 0 && mousePos.x < 420) {  
         ajouteEcouteurClickSourie();
         if (inputState.leftClick) {
             assets.linkForestMusic.play();
             gameState = 'jeuEnCoursLv1';
             joueur.x = 60;
             joueur.y = 230;
+            heart1.numero = 0;
+            heart2.numero = 0;
+            heart3.numero = 0;
         }
      }
 
-    if (mousePos.x > 190 && mousePos.x < 370 && mousePos.y > 170 && mousePos.y < 200) {  
+    if (mousePos.x > 420 && mousePos.x < 875) {  
         ajouteEcouteurClickSourie();
         if (inputState.leftClick) {
             assets.linkForestMusic.play();
             gameState = 'jeuEnCoursLv2';
             joueur.x = 810;
             joueur.y = 239;
+            heart1.numero = 0;
+            heart2.numero = 0;
+            heart3.numero = 0;
         }
     }
 
@@ -567,17 +559,16 @@ function afficheMenuNiveau(ctx) {
 } 
 
 function afficheGameOver(ctx) {
+
     ctx.save();
+    ctx.drawImage(assets.gameOverAssets, 222, 137, canvas.width/3, canvas.height/3);
     ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'white';
-    ctx.font = "130px Arial";
-    ctx.fillText("GAME OVER", 190, 100);
-    ctx.strokeText("GAME OVER", 190, 100);
+
     if (inputState.space) {
         gameState = 'menuStart';
         joueur.x = 0;
     }
+
     ctx.restore();
 }
 
@@ -601,12 +592,14 @@ function testeEtatClavierPourJoueur() {
 function testCollisionAvecMonsterLv1(){
 
     let collisionExist = false;
-    
+    let currentObstacle;
+
     tableauDesObjetsGraphiquesLv1.forEach(o => {
         
         if (o instanceof ObstacleAnime) {
             if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
                 collisionExist = true;
+                currentObstacle = o;
             }
         }
     }
@@ -614,24 +607,102 @@ function testCollisionAvecMonsterLv1(){
 
     if (collisionExist) {
 
-        joueur.x -= 200;
+        assets.hitMusic.play();
 
-        if (coeur_1 == 1 || coeur_1 == 2){
+
+
+        
+        //collision par la gauche
+        if(joueur.x < currentObstacle.x){
+            joueur.x = currentObstacle.x - joueur.l - 20;
+        } 
+        //collision par la droite
+        if(joueur.x > currentObstacle.x){
+            joueur.x = currentObstacle.x + currentObstacle.l + 20;
+        }
+        //collision par le haut
+        if(joueur.y < currentObstacle.y){
+            joueur.y = currentObstacle.y - joueur.h - 20;
+        }
+        //collision par le bas
+        if(joueur.y > currentObstacle.y){
+            joueur.y = currentObstacle.y + currentObstacle.h + 20 ;
+        }
+            
+
+
+
+        if (heart1.numero == 0 || heart1.numero == 1){
             heart1.loseLife();
-        } else if (coeur_2 == 1 || coeur_2 == 2){
+        } else if (heart2.numero == 0 || heart2.numero == 1){
             heart2.loseLife();
-        } else if (coeur_3 == 1 || coeur_3 == 2){
+        } else if (heart3.numero == 0 || heart3.numero == 1){
             heart3.loseLife();
         }
 
-        if (coeur_3 == 3){
+        if (heart3.numero == 2){
             assets.linkForestMusic.stop();
             gameState = 'gameOver';
         }
 
     }
 
-    console.log("COLLISION MONSTER" + coeur_1 + " " + coeur_2 + " " + coeur_3)
+
+}
+
+function testCollisionAvecMonsterLv2(){
+
+    let collisionExist = false;
+    let currentObstacle;
+
+    tableauDesObjetsGraphiquesLv2.forEach(o => {
+        
+        if (o instanceof ObstacleAnime) {
+            if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
+                collisionExist = true;
+                currentObstacle = o;
+            }
+        }
+    }
+    );
+
+    if (collisionExist) {
+
+        assets.hitMusic.play();
+
+        //collision par la gauche
+        if(joueur.x < currentObstacle.x){
+            joueur.x = currentObstacle.x - joueur.l - 20;
+        } 
+        //collision par la droite
+        if(joueur.x > currentObstacle.x){
+            joueur.x = currentObstacle.x + currentObstacle.l + 20;
+        }
+        //collision par le haut
+        if(joueur.y < currentObstacle.y){
+            joueur.y = currentObstacle.y - joueur.h - 20;
+        }
+        //collision par le bas
+        if(joueur.y > currentObstacle.y){
+            joueur.y = currentObstacle.y + currentObstacle.h + 20 ;
+        }
+
+
+        if (heart1.numero == 0 || heart1.numero == 1){
+            heart1.loseLife();
+        } else if (heart2.numero == 0 || heart2.numero == 1){
+            heart2.loseLife();
+        } else if (heart3.numero == 0 || heart3.numero == 1){
+            heart3.loseLife();
+        }
+
+        if (heart3.numero == 2){
+            assets.linkForestMusic.stop();
+            gameState = 'gameOver';
+        }
+
+    }
+
 
 }
 
@@ -815,16 +886,68 @@ function detecteCollisionJoueurAvecSortie() {
     //joueur.drawBoundingBox(ctx);
     //sortie.drawBoundingBox(ctx);
     if (circRectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, sortie1.x, sortie1.y, sortie1.r)) {
-        assets.linkForestMusic.stop();
-        assets.menuMusic.play();
-        gameState = 'menuStart';
+        assets.victoryMusic.play();
+        gameState = 'jeuEnCoursLv2';
+        joueur.x = 810;
+        joueur.y = 250;
         sortie1.couleur = 'lightgreen';
     }
 
     if (circRectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, sortie2.x, sortie2.y, sortie2.r)) {
         assets.linkForestMusic.stop();
-        assets.menuMusic.play();
+        assets.victoryMusic.play();
         gameState = 'menuStart';
         sortie2.couleur = 'lightgreen';
+    }
+}
+
+function detecteCollisionJoueurCoeur() {
+
+    let collisionExist = false;
+    let currentObstacle;
+
+    tableauDesObjetsGraphiquesLv1.forEach(o => {
+        if (o instanceof Item) {
+            if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
+                collisionExist = true;
+                currentObstacle = o;
+                let index = tableauDesObjetsGraphiquesLv1.indexOf(currentObstacle);
+                tableauDesObjetsGraphiquesLv1.splice(index, 1);
+            }
+        }
+    }
+    );
+
+    tableauDesObjetsGraphiquesLv2.forEach(o => {
+        if (o instanceof Item) {
+            if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
+                collisionExist = true;
+                currentObstacle = o;
+                let index = tableauDesObjetsGraphiquesLv2.indexOf(currentObstacle);
+                tableauDesObjetsGraphiquesLv2.splice(index, 1);
+            }
+        }
+    }
+    );
+
+    if (collisionExist) {
+        assets.heartCharge.play();
+
+        if (heart3.numero == 1){
+            heart3.gainLife();
+        } else if(heart3.numero == 0){
+            if (heart2.numero == 2){
+                heart2.gainLife();
+            }else if(heart2.numero == 1){
+                heart2.gainLife();
+            }else if(heart2.numero == 0){
+                if (heart1.numero == 2){
+                    heart1.gainLife();
+                }else if(heart1.numero == 1){
+                    heart1.gainLife();
+                }
+            }
+        }
+
     }
 }
