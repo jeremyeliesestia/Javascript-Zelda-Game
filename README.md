@@ -6,8 +6,8 @@ Le but est de retrouver la princesse Zelda au bout de chaque niveaux sans mourri
 
 ## Authors - ESTIA MBDS
 
-- Louis Mazaud [@Mazaud501](https://www.github.com/Mazaud501)
-- Jérémy ELIES [@jeremyeliesestia](https://www.github.com/jeremyeliesestia)
+- Louis Mazaud [@Mazaud501](https://www.github.com/Mazaud501) l.mazaud@net.estia.fr
+- Jérémy ELIES [@jeremyeliesestia](https://www.github.com/jeremyeliesestia) j.elies@net.estia.fr
 
 ## Caractéristiques de Gameplay implémentées
 
