@@ -648,6 +648,11 @@ function afficheMenuNiveau(ctx) {
             positionTableauHeart = 0;
             positionTableauRuby = 0;
 
+            score = 0;
+
+            reinitItemsLv1();
+            reinitItemsLv2();
+
         }
      }
 
@@ -667,6 +672,11 @@ function afficheMenuNiveau(ctx) {
             timeSpriteRuby = 0;
             positionTableauHeart = 0;
             positionTableauRuby = 0;
+
+            score = 0;
+
+            reinitItemsLv1();
+            reinitItemsLv2();
         }
     }
 
@@ -1165,5 +1175,43 @@ function detecteCollisionJoueurRubyLv2() {
         }
         console.log("HOP LA DES SOUS");
     }
+
+}
+
+function reinitItemsLv1(){
+    tableauDesObjetsGraphiquesLv1.forEach(o => {
+        if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
+            if (o instanceof Item) {
+                let index = tableauDesObjetsGraphiquesLv1.indexOf(o);
+                tableauDesObjetsGraphiquesLv1.splice(index, 1);
+            }
+        }
+}
+);
+
+tableauDesObjetsGraphiquesLv1.push(coeur);
+
+rubyListLv1.forEach(ruby => {
+    tableauDesObjetsGraphiquesLv1.push(ruby);
+});
+
+}
+
+function reinitItemsLv2(){
+    tableauDesObjetsGraphiquesLv2.forEach(o => {
+        if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
+            if (o instanceof Item) {
+                let index = tableauDesObjetsGraphiquesLv2.indexOf(o);
+                tableauDesObjetsGraphiquesLv2.splice(index, 1);
+            }
+        }
+}
+);
+
+tableauDesObjetsGraphiquesLv2.push(coeur2);
+
+rubyListLv2.forEach(ruby => {
+    tableauDesObjetsGraphiquesLv2.push(ruby);
+});
 
 }
