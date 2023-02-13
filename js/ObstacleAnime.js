@@ -87,19 +87,19 @@ export default class ObstacleAnime extends Obstacle {
         if (this.sens === "vertical") {
 
             if (this.direction === "bas") {
-                if (this.timeSprite == 15) {
+                if (this.timeSprite ===15) {
                     this.numeroSprite = 1;
                 }
 
-                if (this.timeSprite == 30) {
+                if (this.timeSprite ===30) {
                     this.numeroSprite = 2;
                 }
 
-                if (this.timeSprite == 45) {
+                if (this.timeSprite ===45) {
                     this.numeroSprite = 3;
                 }
 
-                if (this.timeSprite == 0) {
+                if (this.timeSprite ===0) {
                     this.numeroSprite = 0;
                 }
             }
@@ -107,19 +107,19 @@ export default class ObstacleAnime extends Obstacle {
 
             if (this.direction === "haut") {
 
-                if (this.timeSprite == 15) {
+                if (this.timeSprite ===15) {
                     this.numeroSprite = 13;
                 }
 
-                if (this.timeSprite == 30) {
+                if (this.timeSprite ===30) {
                     this.numeroSprite = 14;
                 }
 
-                if (this.timeSprite == 45) {
+                if (this.timeSprite ===45) {
                     this.numeroSprite = 15;
                 }
 
-                if (this.timeSprite == 0) {
+                if (this.timeSprite ===0) {
                     this.numeroSprite = 12;
                 }
 
@@ -130,19 +130,19 @@ export default class ObstacleAnime extends Obstacle {
         if (this.sens === "horizontal") {
 
             if (this.direction === "gauche") {
-                if (this.timeSprite == 15) {
+                if (this.timeSprite ===15) {
                     this.numeroSprite = 5;
                 }
 
-                if (this.timeSprite == 30) {
+                if (this.timeSprite ===30) {
                     this.numeroSprite = 6;
                 }
 
-                if (this.timeSprite == 45) {
+                if (this.timeSprite ===45) {
                     this.numeroSprite = 7;
                 }
 
-                if (this.timeSprite == 0) {
+                if (this.timeSprite ===0) {
                     this.numeroSprite = 4;
                 }
 
@@ -150,19 +150,19 @@ export default class ObstacleAnime extends Obstacle {
 
             if (this.direction === "droite") {
 
-                if (this.timeSprite == 15) {
+                if (this.timeSprite ===15) {
                     this.numeroSprite = 9;
                 }
 
-                if (this.timeSprite == 30) {
+                if (this.timeSprite ===30) {
                     this.numeroSprite = 10;
                 }
 
-                if (this.timeSprite == 45) {
+                if (this.timeSprite ===45) {
                     this.numeroSprite = 11;
                 }
 
-                if (this.timeSprite == 0) {
+                if (this.timeSprite ===0) {
                     this.numeroSprite = 8;
                 }
 

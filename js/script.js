@@ -440,17 +440,17 @@ function animationLoop() {
             testeEtatClavierPourJoueur();
             
             timeSprite += 1; 
-            if (timeSprite == 60) {
+            if (timeSprite === 60) {
                 timeSprite = 0;
             }
 
 
             //timer pour le sprite du coeur
             timeSpriteHeart += 1;
-            if (timeSpriteHeart == 5) {
+            if (timeSpriteHeart === 5) {
                 coeur.spriteMvt(positionTableauHeart);
                 positionTableauHeart += 1;
-                if (positionTableauHeart == 8) {
+                if (positionTableauHeart === 8) {
                     positionTableauHeart = 0;
                 }
                 timeSpriteHeart = 0;
@@ -458,13 +458,13 @@ function animationLoop() {
 
             //timer pour le sprite du ruby
             timeSpriteRuby += 1;
-            if (timeSpriteRuby == 10) {
+            if (timeSpriteRuby === 10) {
 
                 rubyListLv1.forEach(ruby => {
                 
                     ruby.spriteMvt(positionTableauRuby);
                     positionTableauRuby += 1;
-                    if (positionTableauRuby == 4) {
+                    if (positionTableauRuby === 4) {
                         positionTableauRuby = 0;
                     }
 
@@ -522,16 +522,16 @@ function animationLoop() {
             testeEtatClavierPourJoueur();
 
             timeSprite += 1; 
-            if (timeSprite == 60) {
+            if (timeSprite === 60) {
                 timeSprite = 0;
             }
 
             //timer pour le sprite du coeur
             timeSpriteHeart += 1;
-            if (timeSpriteHeart == 5) {
+            if (timeSpriteHeart === 5) {
                 coeur2.spriteMvt(positionTableauHeart);
                 positionTableauHeart += 1;
-                if (positionTableauHeart == 8) {
+                if (positionTableauHeart === 8) {
                     positionTableauHeart = 0;
                 }
                 timeSpriteHeart = 0;
@@ -539,13 +539,13 @@ function animationLoop() {
 
             //timer pour le sprite du ruby
             timeSpriteRuby += 1;
-            if (timeSpriteRuby == 10) {
+            if (timeSpriteRuby === 10) {
 
                 rubyListLv2.forEach(ruby => {
                 
                     ruby.spriteMvt(positionTableauRuby);
                     positionTableauRuby += 1;
-                    if (positionTableauRuby == 4) {
+                    if (positionTableauRuby === 4) {
                         positionTableauRuby = 0;
                     }
 
@@ -754,15 +754,15 @@ function testCollisionAvecMonsterLv1(){
 
 
 
-        if (heart1.numero == 0 || heart1.numero == 1){
+        if (heart1.numero === 0 || heart1.numero === 1){
             heart1.loseLife();
-        } else if (heart2.numero == 0 || heart2.numero == 1){
+        } else if (heart2.numero === 0 || heart2.numero === 1){
             heart2.loseLife();
-        } else if (heart3.numero == 0 || heart3.numero == 1){
+        } else if (heart3.numero === 0 || heart3.numero === 1){
             heart3.loseLife();
         }
 
-        if (heart3.numero == 2){
+        if (heart3.numero === 2){
             assets.linkForestMusic.stop();
             gameState = 'gameOver';
         }
@@ -810,15 +810,15 @@ function testCollisionAvecMonsterLv2(){
         }
 
 
-        if (heart1.numero == 0 || heart1.numero == 1){
+        if (heart1.numero === 0 || heart1.numero === 1){
             heart1.loseLife();
-        } else if (heart2.numero == 0 || heart2.numero == 1){
+        } else if (heart2.numero === 0 || heart2.numero === 1){
             heart2.loseLife();
-        } else if (heart3.numero == 0 || heart3.numero == 1){
+        } else if (heart3.numero === 0 || heart3.numero === 1){
             heart3.loseLife();
         }
 
-        if (heart3.numero == 2){
+        if (heart3.numero === 2){
             assets.linkForestMusic.stop();
             gameState = 'gameOver';
         }
@@ -858,7 +858,7 @@ function detecteCollisionJoueurAvecObstaclesLv1() {
         joueur.couleur = 'red';
         joueur.v = 0;
 
-        if (typeObstacle == 'rect') {
+        if (typeObstacle === 'rect') {
             if ((inputState.left || inputState.right) && (!inputState.up && !inputState.down)) {
             //collision par la gauche
                 if(joueur.x < currentObstacle.x){
@@ -882,7 +882,7 @@ function detecteCollisionJoueurAvecObstaclesLv1() {
             }
         }
 
-        if (typeObstacle == 'rounded') {
+        if (typeObstacle === 'rounded') {
 
             if ((inputState.left || inputState.right) && (!inputState.up && !inputState.down)) {
                 //collision par la gauche
@@ -947,7 +947,7 @@ function detecteCollisionJoueurAvecObstaclesLv2() {
         joueur.couleur = 'red';
         joueur.v = 0;
 
-        if (typeObstacle == 'rect') {
+        if (typeObstacle === 'rect') {
             if ((inputState.left || inputState.right) && (!inputState.up && !inputState.down)) {
             //collision par la gauche
                 if(joueur.x < currentObstacle.x){
@@ -971,7 +971,7 @@ function detecteCollisionJoueurAvecObstaclesLv2() {
             }
         }
 
-        if (typeObstacle == 'rounded') {
+        if (typeObstacle === 'rounded') {
 
             if ((inputState.left || inputState.right) && (!inputState.up && !inputState.down)) {
                 //collision par la gauche
@@ -1029,7 +1029,7 @@ function detecteCollisionJoueurCoeurLv1() {
     let currentObstacle;
 
     tableauDesObjetsGraphiquesLv1.forEach(o => {
-        if (o instanceof Item && o.type == 'coeur') {
+        if (o instanceof Item && o.type === 'coeur') {
             if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
                 collisionExist = true;
                 currentObstacle = o;
@@ -1043,17 +1043,17 @@ function detecteCollisionJoueurCoeurLv1() {
     if (collisionExist) {
         assets.heartCharge.play();
 
-        if (heart3.numero == 1){
+        if (heart3.numero === 1){
             heart3.gainLife();
-        } else if(heart3.numero == 0){
-            if (heart2.numero == 2){
+        } else if(heart3.numero === 0){
+            if (heart2.numero === 2){
                 heart2.gainLife();
-            }else if(heart2.numero == 1){
+            }else if(heart2.numero === 1){
                 heart2.gainLife();
-            }else if(heart2.numero == 0){
-                if (heart1.numero == 2){
+            }else if(heart2.numero === 0){
+                if (heart1.numero === 2){
                     heart1.gainLife();
-                }else if(heart1.numero == 1){
+                }else if(heart1.numero === 1){
                     heart1.gainLife();
                 }
             }
@@ -1068,7 +1068,7 @@ function detecteCollisionJoueurCoeurLv2() {
     let currentObstacle;
 
     tableauDesObjetsGraphiquesLv2.forEach(o => {
-        if (o instanceof Item && o.type == 'coeur') {
+        if (o instanceof Item && o.type === 'coeur') {
             if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
                 collisionExist = true;
                 currentObstacle = o;
@@ -1082,17 +1082,17 @@ function detecteCollisionJoueurCoeurLv2() {
     if (collisionExist) {
         assets.heartCharge.play();
 
-        if (heart3.numero == 1){
+        if (heart3.numero === 1){
             heart3.gainLife();
-        } else if(heart3.numero == 0){
-            if (heart2.numero == 2){
+        } else if(heart3.numero === 0){
+            if (heart2.numero === 2){
                 heart2.gainLife();
-            }else if(heart2.numero == 1){
+            }else if(heart2.numero === 1){
                 heart2.gainLife();
-            }else if(heart2.numero == 0){
-                if (heart1.numero == 2){
+            }else if(heart2.numero === 0){
+                if (heart1.numero === 2){
                     heart1.gainLife();
-                }else if(heart1.numero == 1){
+                }else if(heart1.numero === 1){
                     heart1.gainLife();
                 }
             }
@@ -1109,7 +1109,7 @@ function detecteCollisionJoueurRubyLv1() {
 
     tableauDesObjetsGraphiquesLv1.forEach(o => {
             if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
-                if (o instanceof Item && (o.type == 'ruby_green' || o.type == 'ruby_red' || o.type == 'ruby_yellow')) {
+                if (o instanceof Item && (o.type === 'ruby_green' || o.type === 'ruby_red' || o.type === 'ruby_yellow')) {
                     collisionExist = true;
                     rubyType = o.type;
                     console.log("CHUI LA ");
@@ -1121,13 +1121,13 @@ function detecteCollisionJoueurRubyLv1() {
     }
     );
 
-    if (collisionExist == true) {
+    if (collisionExist === true) {
         assets.getRuby.play();
-        if (rubyType == 'ruby_green'){
+        if (rubyType === 'ruby_green'){
             score += 100;
-        } else if(rubyType == 'ruby_red'){
+        } else if(rubyType === 'ruby_red'){
             score += 250;
-        } else if (rubyType == 'ruby_yellow'){
+        } else if (rubyType === 'ruby_yellow'){
             score += 500;
         }
         console.log("HOP LA DES SOUS");
@@ -1143,7 +1143,7 @@ function detecteCollisionJoueurRubyLv2() {
 
     tableauDesObjetsGraphiquesLv2.forEach(o => {
         if (rectsOverlap(joueur.x, joueur.y, joueur.l, joueur.h, o.x, o.y, o.l, o.h)) {
-            if (o instanceof Item && (o.type == 'ruby_green' || o.type == 'ruby_red' || o.type == 'ruby_yellow')) {
+            if (o instanceof Item && (o.type === 'ruby_green' || o.type === 'ruby_red' || o.type === 'ruby_yellow')) {
                 collisionExist = true;
                 rubyType = o.type;
                 currentObstacle = o;
@@ -1154,13 +1154,13 @@ function detecteCollisionJoueurRubyLv2() {
     }
     );
 
-    if (collisionExist == true) {
+    if (collisionExist === true) {
         assets.getRuby.play();
-        if (rubyType == 'ruby_green'){
+        if (rubyType === 'ruby_green'){
             score += 100;
-        } else if(rubyType == 'ruby_red'){
+        } else if(rubyType === 'ruby_red'){
             score += 250;
-        } else if (rubyType == 'ruby_yellow'){
+        } else if (rubyType === 'ruby_yellow'){
             score += 500;
         }
         console.log("HOP LA DES SOUS");
