@@ -1122,7 +1122,6 @@ function detecteCollisionJoueurRubyLv1() {
                 if (o instanceof Item && (o.type === 'ruby_green' || o.type === 'ruby_red' || o.type === 'ruby_yellow')) {
                     collisionExist = true;
                     rubyType = o.type;
-                    console.log("CHUI LA ");
                     currentObstacle = o;
                     let index = tableauDesObjetsGraphiquesLv1.indexOf(currentObstacle);
                     tableauDesObjetsGraphiquesLv1.splice(index, 1);
@@ -1140,7 +1139,6 @@ function detecteCollisionJoueurRubyLv1() {
         } else if (rubyType === 'ruby_yellow'){
             score += 500;
         }
-        console.log("HOP LA DES SOUS");
     }
 
 }
@@ -1173,7 +1171,6 @@ function detecteCollisionJoueurRubyLv2() {
         } else if (rubyType === 'ruby_yellow'){
             score += 500;
         }
-        console.log("HOP LA DES SOUS");
     }
 
 }
